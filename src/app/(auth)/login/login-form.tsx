@@ -7,13 +7,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 export function LoginForm() {
   const router = useRouter();
@@ -47,61 +40,56 @@ export function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-slate-700 bg-slate-800/50 backdrop-blur-sm">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-12 h-12 bg-sky-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-xl">Q</span>
-            </div>
+    <div className="w-full max-w-sm mx-4">
+      {/* Logo */}
+      <div className="text-center mb-8">
+        <div className="w-14 h-14 bg-sky-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <span className="text-white font-bold text-2xl">Q</span>
+        </div>
+        <h1 className="text-2xl font-bold text-white">HT Quiz Platform</h1>
+        <p className="text-slate-400 text-sm mt-1">Sign in to access the admin panel</p>
+      </div>
+
+      {/* Form */}
+      <div className="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-slate-300 text-sm">
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="admin@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="bg-slate-700/60 border-slate-600 text-white placeholder:text-slate-500 h-11"
+            />
           </div>
-          <CardTitle className="text-2xl font-bold text-white">
-            HT Quiz Platform
-          </CardTitle>
-          <CardDescription className="text-slate-400">
-            Sign in to access the admin panel
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-300">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:border-sky-500 h-11"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-300">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:border-sky-500 h-11"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium h-11"
-              disabled={loading}
-            >
-              {loading ? "Signing in..." : "Sign In"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-slate-300 text-sm">
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="bg-slate-700/60 border-slate-600 text-white placeholder:text-slate-500 h-11"
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium h-11 mt-2"
+            disabled={loading}
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }
