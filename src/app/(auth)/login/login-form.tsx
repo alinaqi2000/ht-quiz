@@ -34,7 +34,7 @@ export function LoginForm() {
       return;
     }
 
-    toast.success("Logged in successfully");
+    toast.success("Welcome back");
     router.push(callbackUrl);
     router.refresh();
   }
@@ -43,20 +43,18 @@ export function LoginForm() {
     <div className="w-full max-w-sm mx-4">
       {/* Logo */}
       <div className="text-center mb-8">
-        <div className="w-14 h-14 bg-sky-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <span className="text-white font-bold text-2xl">Q</span>
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-amber-500/20">
+          <span className="text-black font-bold text-2xl">T</span>
         </div>
-        <h1 className="text-2xl font-bold text-white">HT Quiz Platform</h1>
-        <p className="text-slate-400 text-sm mt-1">Sign in to access the admin panel</p>
+        <h1 className="text-2xl font-bold text-white tracking-tight">Techsoft Quiz</h1>
+        <p className="text-zinc-500 text-sm mt-1">Sign in to the admin panel</p>
       </div>
 
-      {/* Form */}
-      <div className="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 space-y-4">
+      {/* Card */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="email" className="text-slate-300 text-sm">
-              Email
-            </Label>
+            <Label htmlFor="email" className="text-zinc-400 text-sm">Email</Label>
             <Input
               id="email"
               type="email"
@@ -64,13 +62,11 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="bg-slate-700/60 border-slate-600 text-white placeholder:text-slate-500 h-11"
+              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-600 h-11 focus:border-amber-500/50 focus:ring-amber-500/20"
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="password" className="text-slate-300 text-sm">
-              Password
-            </Label>
+            <Label htmlFor="password" className="text-zinc-400 text-sm">Password</Label>
             <Input
               id="password"
               type="password"
@@ -78,12 +74,12 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="bg-slate-700/60 border-slate-600 text-white placeholder:text-slate-500 h-11"
+              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-600 h-11 focus:border-amber-500/50 focus:ring-amber-500/20"
             />
           </div>
           <Button
             type="submit"
-            className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium h-11 mt-2"
+            className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black font-semibold h-11 mt-2 shadow-md shadow-amber-500/20"
             disabled={loading}
           >
             {loading ? "Signing in..." : "Sign In"}

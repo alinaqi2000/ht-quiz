@@ -36,8 +36,8 @@ export default async function UserLinksPage({
 
       <div className="p-6 space-y-4">
         {user.quizLinks.length === 0 ? (
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardContent className="py-12 text-center text-slate-500">
+          <Card className="bg-zinc-900/50 border-zinc-800">
+            <CardContent className="py-12 text-center text-zinc-500">
               No quiz links assigned to this user yet.
             </CardContent>
           </Card>
@@ -45,7 +45,7 @@ export default async function UserLinksPage({
           user.quizLinks.map((link) => (
             <Card
               key={link.id}
-              className="bg-slate-800/50 border-slate-700"
+              className="bg-zinc-900/50 border-zinc-800"
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -58,7 +58,7 @@ export default async function UserLinksPage({
                       className={
                         link.used
                           ? "border-green-600/50 text-green-400"
-                          : "border-slate-600 text-slate-400"
+                          : "border-zinc-700 text-zinc-400"
                       }
                     >
                       {link.used ? (
@@ -75,13 +75,13 @@ export default async function UserLinksPage({
                 </div>
               </CardHeader>
               <CardContent className="space-y-2">
-                <div className="flex items-center gap-2 bg-slate-900 rounded-md p-2">
-                  <LinkIcon className="w-3 h-3 text-slate-500 shrink-0" />
-                  <code className="text-xs text-sky-400 break-all">
+                <div className="flex items-center gap-2 bg-zinc-950 rounded-md p-2">
+                  <LinkIcon className="w-3 h-3 text-zinc-500 shrink-0" />
+                  <code className="text-xs text-amber-400 break-all">
                     {baseUrl}/quiz/{link.token}
                   </code>
                 </div>
-                <div className="flex gap-4 text-xs text-slate-500">
+                <div className="flex gap-4 text-xs text-zinc-500">
                   <span>Created: {format(new Date(link.createdAt), "MMM d, yyyy HH:mm")}</span>
                   {link.usedAt && (
                     <span>Used: {format(new Date(link.usedAt), "MMM d, yyyy HH:mm")}</span>

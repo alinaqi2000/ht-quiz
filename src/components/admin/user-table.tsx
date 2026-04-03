@@ -62,7 +62,7 @@ export function UserTable({ users }: UserTableProps) {
 
   if (users.length === 0) {
     return (
-      <div className="text-center py-12 text-slate-500">
+      <div className="text-center py-12 text-zinc-500">
         No users yet. Create your first user.
       </div>
     );
@@ -75,7 +75,7 @@ export function UserTable({ users }: UserTableProps) {
           variant="ghost"
           size="sm"
           asChild
-          className="text-slate-400 hover:text-white hover:bg-slate-700"
+          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
           title="Quiz Links"
         >
           <Link href={`/admin/users/${user.id}/links`}>
@@ -86,7 +86,7 @@ export function UserTable({ users }: UserTableProps) {
           variant="ghost"
           size="sm"
           asChild
-          className="text-slate-400 hover:text-white hover:bg-slate-700"
+          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
           title="Edit"
         >
           <Link href={`/admin/users/${user.id}`}>
@@ -104,18 +104,18 @@ export function UserTable({ users }: UserTableProps) {
               <Trash2 className="w-4 h-4" />
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className="bg-slate-800 border-slate-700 mx-4">
+          <AlertDialogContent className="bg-zinc-900 border-zinc-800 mx-4">
             <AlertDialogHeader>
               <AlertDialogTitle className="text-white">
                 Delete User
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-slate-400">
+              <AlertDialogDescription className="text-zinc-400">
                 Are you sure you want to delete {user.name}? This cannot be
                 undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className="border-slate-700 text-slate-300 hover:bg-slate-700">
+              <AlertDialogCancel className="border-zinc-800 text-zinc-300 hover:bg-zinc-800">
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction
@@ -138,7 +138,7 @@ export function UserTable({ users }: UserTableProps) {
         {users.map((user) => (
           <div
             key={user.id}
-            className="bg-slate-800/60 border border-slate-700 rounded-xl p-4 space-y-3"
+            className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 space-y-3"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -156,20 +156,20 @@ export function UserTable({ users }: UserTableProps) {
                     variant="outline"
                     className={
                       user.role === "ADMIN"
-                        ? "border-sky-600/50 text-sky-400 text-xs"
-                        : "border-slate-600 text-slate-400 text-xs"
+                        ? "border-amber-500/40 text-amber-400 text-xs"
+                        : "border-zinc-700 text-zinc-400 text-xs"
                     }
                   >
                     {user.role}
                   </Badge>
                 </div>
-                <p className="text-slate-400 text-sm mt-0.5 truncate">
+                <p className="text-zinc-400 text-sm mt-0.5 truncate">
                   {user.email}
                 </p>
               </div>
               <ActionButtons user={user} />
             </div>
-            <div className="flex items-center gap-4 text-xs text-slate-500">
+            <div className="flex items-center gap-4 text-xs text-zinc-500">
               <span>{user._count.attempts} attempts</span>
               <span>Joined {format(new Date(user.createdAt), "MMM d, yyyy")}</span>
             </div>
@@ -178,23 +178,23 @@ export function UserTable({ users }: UserTableProps) {
       </div>
 
       {/* Desktop table */}
-      <div className="hidden lg:block rounded-lg border border-slate-700 overflow-hidden">
+      <div className="hidden lg:block rounded-lg border border-zinc-800 overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="border-slate-700 hover:bg-transparent">
-              <TableHead className="text-slate-400">Name</TableHead>
-              <TableHead className="text-slate-400">Email</TableHead>
-              <TableHead className="text-slate-400">Role</TableHead>
-              <TableHead className="text-slate-400">Attempts</TableHead>
-              <TableHead className="text-slate-400">Joined</TableHead>
-              <TableHead className="text-slate-400 text-right">Actions</TableHead>
+            <TableRow className="border-zinc-800 hover:bg-transparent">
+              <TableHead className="text-zinc-400">Name</TableHead>
+              <TableHead className="text-zinc-400">Email</TableHead>
+              <TableHead className="text-zinc-400">Role</TableHead>
+              <TableHead className="text-zinc-400">Attempts</TableHead>
+              <TableHead className="text-zinc-400">Joined</TableHead>
+              <TableHead className="text-zinc-400 text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.map((user) => (
               <TableRow
                 key={user.id}
-                className="border-slate-700 hover:bg-slate-800/50"
+                className="border-zinc-800 hover:bg-zinc-900/50"
               >
                 <TableCell className="text-white font-medium">
                   <div className="flex items-center gap-2">
@@ -209,23 +209,23 @@ export function UserTable({ users }: UserTableProps) {
                     )}
                   </div>
                 </TableCell>
-                <TableCell className="text-slate-300">{user.email}</TableCell>
+                <TableCell className="text-zinc-300">{user.email}</TableCell>
                 <TableCell>
                   <Badge
                     variant="outline"
                     className={
                       user.role === "ADMIN"
-                        ? "border-sky-600/50 text-sky-400"
-                        : "border-slate-600 text-slate-400"
+                        ? "border-amber-500/40 text-amber-400"
+                        : "border-zinc-700 text-zinc-400"
                     }
                   >
                     {user.role}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-slate-300">
+                <TableCell className="text-zinc-300">
                   {user._count.attempts}
                 </TableCell>
-                <TableCell className="text-slate-400 text-sm">
+                <TableCell className="text-zinc-400 text-sm">
                   {format(new Date(user.createdAt), "MMM d, yyyy")}
                 </TableCell>
                 <TableCell className="text-right">

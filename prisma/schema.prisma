@@ -80,8 +80,8 @@ model QuizAttempt {
   submittedAt DateTime?
   isComplete  Boolean   @default(false)
 
-  user User @relation(fields: [userId], references: [id])
-  quiz Quiz @relation(fields: [quizId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@unique([userId, quizId])
 }
@@ -96,6 +96,6 @@ model QuizLink {
   expiresAt DateTime?
   createdAt DateTime  @default(now())
 
-  user User? @relation(fields: [userId], references: [id])
-  quiz Quiz  @relation(fields: [quizId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  quiz Quiz  @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }

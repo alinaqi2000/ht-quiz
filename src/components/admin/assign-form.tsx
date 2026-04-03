@@ -147,31 +147,31 @@ export function AssignForm({
       {/* ── PUBLIC LINK SECTION ── */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Globe className="w-4 h-4 text-sky-400" />
+          <Globe className="w-4 h-4 text-amber-400" />
           <h2 className="text-white font-semibold">Public Link</h2>
-          <Badge variant="outline" className="border-sky-600/50 text-sky-400 text-xs">
+          <Badge variant="outline" className="border-amber-500/40 text-amber-400 text-xs">
             Anyone with the link
           </Badge>
         </div>
-        <p className="text-slate-400 text-sm">
+        <p className="text-zinc-400 text-sm">
           Share one link with everyone. Participants enter their name and email before starting.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1 space-y-1">
-            <Label className="text-slate-400 text-xs">Expiry (optional)</Label>
+            <Label className="text-zinc-400 text-xs">Expiry (optional)</Label>
             <Input
               type="datetime-local"
               value={publicExpiresAt}
               onChange={(e) => setPublicExpiresAt(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white"
+              className="bg-zinc-900 border-zinc-800 text-white"
             />
           </div>
           <div className="sm:self-end">
             <Button
               onClick={handleGeneratePublicLink}
               disabled={publicLoading}
-              className="bg-sky-600 hover:bg-sky-700 text-white w-full sm:w-auto"
+              className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black w-full sm:w-auto"
             >
               <LinkIcon className="w-4 h-4 mr-2" />
               {publicLoading ? "Generating..." : "Generate Public Link"}
@@ -182,24 +182,24 @@ export function AssignForm({
         {publicLinks.length > 0 && (
           <div className="space-y-2">
             {publicLinks.map((link) => (
-              <Card key={link.id} className="bg-slate-800/50 border-sky-600/20">
+              <Card key={link.id} className="bg-zinc-900/50 border-amber-500/15">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                        <Badge variant="outline" className="border-sky-600/50 text-sky-400 text-xs">
+                        <Badge variant="outline" className="border-amber-500/40 text-amber-400 text-xs">
                           Public
                         </Badge>
                         {link.expiresAt && (
-                          <span className="text-xs text-slate-500">
+                          <span className="text-xs text-zinc-500">
                             Expires {format(new Date(link.expiresAt), "MMM d, yyyy HH:mm")}
                           </span>
                         )}
                       </div>
-                      <code className="text-xs text-sky-400 break-all block">
+                      <code className="text-xs text-amber-400 break-all block">
                         {baseUrl}/quiz/{link.token}
                       </code>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-zinc-500 mt-1">
                         Created {format(new Date(link.createdAt), "MMM d, HH:mm")}
                       </p>
                     </div>
@@ -208,7 +208,7 @@ export function AssignForm({
                         variant="ghost"
                         size="sm"
                         onClick={() => copyLink(link.token)}
-                        className="text-slate-400 hover:text-white"
+                        className="text-zinc-400 hover:text-white"
                       >
                         {copiedToken === link.token ? (
                           <CheckCircle className="w-4 h-4 text-green-400" />
@@ -234,28 +234,28 @@ export function AssignForm({
         )}
       </div>
 
-      <div className="border-t border-slate-800" />
+      <div className="border-t border-zinc-800" />
 
       {/* ── PRIVATE LINKS SECTION ── */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <h2 className="text-white font-semibold">Private Links</h2>
-          <Badge variant="outline" className="border-slate-600 text-slate-400 text-xs">
+          <Badge variant="outline" className="border-zinc-700 text-zinc-400 text-xs">
             One link per user
           </Badge>
         </div>
-        <p className="text-slate-400 text-sm">
+        <p className="text-zinc-400 text-sm">
           Generate individual links for specific users — each link is tied to one person.
         </p>
 
         <div className="flex items-center justify-between">
-          <Label className="text-slate-300">Select Users</Label>
+          <Label className="text-zinc-300">Select Users</Label>
           <div className="flex gap-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setSelectedUserIds(users.map((u) => u.id))}
-              className="text-slate-400 hover:text-white text-xs"
+              className="text-zinc-400 hover:text-white text-xs"
             >
               Select All
             </Button>
@@ -263,16 +263,16 @@ export function AssignForm({
               variant="ghost"
               size="sm"
               onClick={() => setSelectedUserIds([])}
-              className="text-slate-400 hover:text-white text-xs"
+              className="text-zinc-400 hover:text-white text-xs"
             >
               Clear
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto border border-slate-700 rounded-lg p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto border border-zinc-800 rounded-lg p-3">
           {users.length === 0 ? (
-            <p className="text-slate-500 text-sm col-span-2 text-center py-4">
+            <p className="text-zinc-500 text-sm col-span-2 text-center py-4">
               No users available
             </p>
           ) : (
@@ -281,19 +281,19 @@ export function AssignForm({
                 key={user.id}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
                   selectedUserIds.includes(user.id)
-                    ? "bg-sky-600/20 border border-sky-600/40"
-                    : "hover:bg-slate-700 border border-transparent"
+                    ? "bg-amber-500/10 border border-amber-500/30"
+                    : "hover:bg-zinc-800 border border-transparent"
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={selectedUserIds.includes(user.id)}
                   onChange={() => toggleUser(user.id)}
-                  className="w-4 h-4 accent-sky-600"
+                  className="w-4 h-4 accent-amber-500"
                 />
                 <div className="min-w-0">
                   <p className="text-sm text-white font-medium truncate">{user.name}</p>
-                  <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                  <p className="text-xs text-zinc-400 truncate">{user.email}</p>
                 </div>
                 {user.isGroupLeader && (
                   <Badge
@@ -310,19 +310,19 @@ export function AssignForm({
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1 space-y-1">
-            <Label className="text-slate-400 text-xs">Expiry (optional)</Label>
+            <Label className="text-zinc-400 text-xs">Expiry (optional)</Label>
             <Input
               type="datetime-local"
               value={expiresAt}
               onChange={(e) => setExpiresAt(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white"
+              className="bg-zinc-900 border-zinc-800 text-white"
             />
           </div>
           <div className="sm:self-end">
             <Button
               onClick={handleAssign}
               disabled={loading || selectedUserIds.length === 0}
-              className="bg-slate-700 hover:bg-slate-600 text-white w-full sm:w-auto"
+              className="bg-zinc-800 hover:bg-zinc-700 text-white w-full sm:w-auto"
             >
               {loading
                 ? "Generating..."
@@ -337,7 +337,7 @@ export function AssignForm({
               Private Links ({allPrivateLinks.length})
             </h3>
             {allPrivateLinks.map((link) => (
-              <Card key={link.id} className="bg-slate-800/50 border-slate-700">
+              <Card key={link.id} className="bg-zinc-900/50 border-zinc-800">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
@@ -345,13 +345,13 @@ export function AssignForm({
                         <p className="text-white text-sm font-medium">
                           {link.user?.name || "—"}
                         </p>
-                        <p className="text-slate-400 text-xs">{link.user?.email}</p>
+                        <p className="text-zinc-400 text-xs">{link.user?.email}</p>
                         <Badge
                           variant="outline"
                           className={
                             link.used
                               ? "border-green-600/50 text-green-400 text-xs"
-                              : "border-slate-600 text-slate-400 text-xs"
+                              : "border-zinc-700 text-zinc-400 text-xs"
                           }
                         >
                           {link.used ? (
@@ -361,10 +361,10 @@ export function AssignForm({
                           )}
                         </Badge>
                       </div>
-                      <code className="text-xs text-sky-400 break-all">
+                      <code className="text-xs text-amber-400 break-all">
                         {baseUrl}/quiz/{link.token}
                       </code>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-zinc-500 mt-1">
                         Created {format(new Date(link.createdAt), "MMM d, HH:mm")}
                       </p>
                     </div>
@@ -372,7 +372,7 @@ export function AssignForm({
                       variant="ghost"
                       size="sm"
                       onClick={() => copyLink(link.token)}
-                      className="text-slate-400 hover:text-white shrink-0"
+                      className="text-zinc-400 hover:text-white shrink-0"
                     >
                       {copiedToken === link.token ? (
                         <CheckCircle className="w-4 h-4 text-green-400" />

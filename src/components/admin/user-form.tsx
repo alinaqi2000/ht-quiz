@@ -85,11 +85,11 @@ export function UserForm({ defaultValues, userId }: UserFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 max-w-lg">
       <div className="space-y-2">
-        <Label className="text-slate-300">Name</Label>
+        <Label className="text-zinc-300">Name</Label>
         <Input
           {...register("name")}
           placeholder="John Doe"
-          className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+          className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500"
         />
         {errors.name && (
           <p className="text-red-400 text-xs">{errors.name.message}</p>
@@ -97,12 +97,12 @@ export function UserForm({ defaultValues, userId }: UserFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-slate-300">Email</Label>
+        <Label className="text-zinc-300">Email</Label>
         <Input
           {...register("email")}
           type="email"
           placeholder="user@example.com"
-          className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+          className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500"
         />
         {errors.email && (
           <p className="text-red-400 text-xs">{errors.email.message}</p>
@@ -110,14 +110,14 @@ export function UserForm({ defaultValues, userId }: UserFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-slate-300">
+        <Label className="text-zinc-300">
           Password {isEdit && "(leave blank to keep current)"}
         </Label>
         <Input
           {...register("password")}
           type="password"
           placeholder={isEdit ? "••••••••" : "Min 6 characters"}
-          className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+          className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500"
         />
         {errors.password && (
           <p className="text-red-400 text-xs">{errors.password.message}</p>
@@ -125,15 +125,15 @@ export function UserForm({ defaultValues, userId }: UserFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-slate-300">Role</Label>
+        <Label className="text-zinc-300">Role</Label>
         <Select
           value={role}
           onValueChange={(val) => setValue("role", val as "ADMIN" | "USER")}
         >
-          <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
+          <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-slate-800 border-slate-700">
+          <SelectContent className="bg-zinc-900 border-zinc-800">
             <SelectItem value="USER" className="text-white">User</SelectItem>
             <SelectItem value="ADMIN" className="text-white">Admin</SelectItem>
           </SelectContent>
@@ -146,9 +146,9 @@ export function UserForm({ defaultValues, userId }: UserFormProps) {
           id="isGroupLeader"
           checked={isGroupLeader}
           onChange={(e) => setValue("isGroupLeader", e.target.checked)}
-          className="w-4 h-4 accent-sky-600"
+          className="w-4 h-4 accent-amber-500"
         />
-        <Label htmlFor="isGroupLeader" className="text-slate-300 cursor-pointer">
+        <Label htmlFor="isGroupLeader" className="text-zinc-300 cursor-pointer">
           Group Leader
         </Label>
       </div>
@@ -157,7 +157,7 @@ export function UserForm({ defaultValues, userId }: UserFormProps) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-sky-600 hover:bg-sky-700 text-white"
+          className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black"
         >
           {isSubmitting ? "Saving..." : isEdit ? "Save Changes" : "Create User"}
         </Button>
@@ -165,7 +165,7 @@ export function UserForm({ defaultValues, userId }: UserFormProps) {
           type="button"
           variant="outline"
           onClick={() => router.push("/admin/users")}
-          className="border-slate-700 text-slate-300 hover:bg-slate-800"
+          className="border-zinc-800 text-zinc-300 hover:bg-zinc-900"
         >
           Cancel
         </Button>

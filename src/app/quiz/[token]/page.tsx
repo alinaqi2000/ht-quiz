@@ -25,10 +25,10 @@ export default async function QuizEntryPage({
 
   if (quizLink.expiresAt && quizLink.expiresAt < new Date()) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center space-y-3">
           <h1 className="text-2xl font-bold text-white">Link Expired</h1>
-          <p className="text-slate-400">This quiz link has expired.</p>
+          <p className="text-zinc-400">This quiz link has expired.</p>
         </div>
       </div>
     );

@@ -28,7 +28,7 @@ export function CountdownTimer({
 
   if (remaining === null) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 rounded-lg font-mono font-bold text-lg bg-slate-800 text-slate-300 border border-slate-700">
+      <div className="flex items-center gap-2 px-4 py-2 rounded-lg font-mono font-bold text-lg bg-zinc-900 text-zinc-300 border border-zinc-800">
         <Clock className="w-4 h-4" />
         --:--
       </div>
@@ -55,7 +55,7 @@ function TimerDisplay({
           ? "bg-red-600/20 text-red-400 border border-red-600/40 animate-pulse"
           : isWarning
           ? "bg-yellow-600/20 text-yellow-400 border border-yellow-600/40"
-          : "bg-slate-800 text-slate-300 border border-slate-700"
+          : "bg-zinc-900 text-zinc-300 border border-zinc-800"
       )}
     >
       <Clock className="w-4 h-4" />

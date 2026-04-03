@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HT Quiz Platform",
+  title: "Techsoft Quiz Platform",
   description: "Quiz management and participation platform",
 };
 

@@ -90,11 +90,11 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 max-w-lg">
       <div className="space-y-2">
-        <Label className="text-slate-300">Title</Label>
+        <Label className="text-zinc-300">Title</Label>
         <Input
           {...register("title")}
           placeholder="JavaScript Fundamentals"
-          className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+          className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500"
         />
         {errors.title && (
           <p className="text-red-400 text-xs">{errors.title.message}</p>
@@ -102,28 +102,28 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-slate-300">Description (optional)</Label>
+        <Label className="text-zinc-300">Description (optional)</Label>
         <Textarea
           {...register("description")}
           placeholder="Brief description of this quiz..."
-          className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 resize-none"
+          className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500 resize-none"
           rows={3}
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label className="text-slate-300">Difficulty</Label>
+          <Label className="text-zinc-300">Difficulty</Label>
           <Select
             value={difficulty}
             onValueChange={(val) =>
               setValue("difficulty", val as "EASY" | "MEDIUM" | "HARD")
             }
           >
-            <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
+            <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-slate-800 border-slate-700">
+            <SelectContent className="bg-zinc-900 border-zinc-800">
               <SelectItem value="EASY" className="text-white">Easy</SelectItem>
               <SelectItem value="MEDIUM" className="text-white">Medium</SelectItem>
               <SelectItem value="HARD" className="text-white">Hard</SelectItem>
@@ -132,13 +132,13 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label className="text-slate-300">Duration (minutes)</Label>
+          <Label className="text-zinc-300">Duration (minutes)</Label>
           <Input
             {...register("durationMin", { valueAsNumber: true })}
             type="number"
             min={1}
             max={180}
-            className="bg-slate-800 border-slate-700 text-white"
+            className="bg-zinc-900 border-zinc-800 text-white"
           />
           {errors.durationMin && (
             <p className="text-red-400 text-xs">{errors.durationMin.message}</p>
@@ -147,15 +147,15 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-slate-300">Type</Label>
+        <Label className="text-zinc-300">Type</Label>
         <Select
           value={type}
           onValueChange={(val) => setValue("type", val as "PUBLIC" | "PRIVATE")}
         >
-          <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
+          <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-slate-800 border-slate-700">
+          <SelectContent className="bg-zinc-900 border-zinc-800">
             <SelectItem value="PRIVATE" className="text-white">
               Private (unique links per user)
             </SelectItem>
@@ -172,9 +172,9 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
           id="isActive"
           checked={isActive}
           onChange={(e) => setValue("isActive", e.target.checked)}
-          className="w-4 h-4 accent-sky-600"
+          className="w-4 h-4 accent-amber-500"
         />
-        <Label htmlFor="isActive" className="text-slate-300 cursor-pointer">
+        <Label htmlFor="isActive" className="text-zinc-300 cursor-pointer">
           Active (visible to participants)
         </Label>
       </div>
@@ -183,7 +183,7 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-sky-600 hover:bg-sky-700 text-white"
+          className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black"
         >
           {isSubmitting
             ? "Saving..."
@@ -195,7 +195,7 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
           type="button"
           variant="outline"
           onClick={() => router.push("/admin/quizzes")}
-          className="border-slate-700 text-slate-300 hover:bg-slate-800"
+          className="border-zinc-800 text-zinc-300 hover:bg-zinc-900"
         >
           Cancel
         </Button>

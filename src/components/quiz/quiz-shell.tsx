@@ -96,7 +96,7 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
         <div className="max-w-lg w-full text-center space-y-6 px-4">
           <div className="w-20 h-20 bg-green-900/30 border-2 border-green-500 rounded-full flex items-center justify-center mx-auto">
             <svg className="w-10 h-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,11 +105,11 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
           </div>
           <div>
             <h2 className="text-2xl font-bold text-white mb-2">Quiz Submitted!</h2>
-            <p className="text-slate-400 text-lg">
+            <p className="text-zinc-400 text-lg">
               Your responses for <span className="text-white font-medium">{quiz.title}</span> have been recorded.
             </p>
           </div>
-          <p className="text-slate-500 text-sm">
+          <p className="text-zinc-500 text-sm">
             Thank you for completing {quiz.title}
           </p>
         </div>
@@ -118,16 +118,16 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-black">
       {/* Sticky header */}
-      <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur border-b border-slate-800">
+      <div className="sticky top-0 z-10 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
         <div className="max-w-3xl mx-auto px-3 sm:px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
               <h1 className="text-white font-semibold text-sm sm:text-base truncate">
                 {quiz.title}
               </h1>
-              <p className="text-slate-400 text-xs">
+              <p className="text-zinc-400 text-xs">
                 {answered}/{questions.length} answered
               </p>
             </div>
@@ -139,7 +139,7 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
           </div>
           <Progress
             value={progress}
-            className="mt-2 h-1 bg-slate-800"
+            className="mt-2 h-1 bg-zinc-900"
           />
         </div>
       </div>
@@ -166,7 +166,7 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
           <Button
             onClick={handleSubmit}
             disabled={submitting}
-            className="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 text-base"
+            className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black font-semibold py-3 text-base"
             size="lg"
           >
             {submitting ? "Submitting..." : "Submit Quiz"}

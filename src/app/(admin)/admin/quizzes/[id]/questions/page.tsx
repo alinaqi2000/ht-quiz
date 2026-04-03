@@ -34,7 +34,7 @@ export default async function QuestionsPage({
         title={`Questions — ${quiz.title}`}
         description={`${quiz.questions.length} questions`}
       >
-        <Button asChild className="bg-sky-600 hover:bg-sky-700 text-white">
+        <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black">
           <Link href={`/admin/quizzes/${id}/questions/new`}>
             <Plus className="w-4 h-4 mr-2" />
             Add Question
@@ -44,27 +44,27 @@ export default async function QuestionsPage({
 
       <div className="p-6 space-y-3">
         <div className="flex gap-3 mb-4">
-          <Button asChild variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800">
+          <Button asChild variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-900">
             <Link href={`/admin/quizzes/${id}/assign`}>Assign Quiz</Link>
           </Button>
-          <Button asChild variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800">
+          <Button asChild variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-900">
             <Link href={`/admin/quizzes/${id}/results`}>View Results</Link>
           </Button>
         </div>
 
         {quiz.questions.length === 0 ? (
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardContent className="py-12 text-center text-slate-500">
+          <Card className="bg-zinc-900/50 border-zinc-800">
+            <CardContent className="py-12 text-center text-zinc-500">
               No questions yet. Add your first question.
             </CardContent>
           </Card>
         ) : (
           quiz.questions.map((q, index) => (
-            <Card key={q.id} className="bg-slate-800/50 border-slate-700">
+            <Card key={q.id} className="bg-zinc-900/50 border-zinc-800">
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center shrink-0">
-                    <span className="text-slate-300 text-sm font-medium">
+                  <div className="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center shrink-0">
+                    <span className="text-zinc-300 text-sm font-medium">
                       {index + 1}
                     </span>
                   </div>
@@ -82,14 +82,14 @@ export default async function QuestionsPage({
                           className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm ${
                             q.correctAnswer === label
                               ? "bg-green-900/30 border border-green-600/40"
-                              : "bg-slate-700/50"
+                              : "bg-zinc-800/50"
                           }`}
                         >
                           <span
                             className={`font-semibold text-xs w-4 ${
                               q.correctAnswer === label
                                 ? "text-green-400"
-                                : "text-slate-500"
+                                : "text-zinc-500"
                             }`}
                           >
                             {label}
@@ -98,7 +98,7 @@ export default async function QuestionsPage({
                             className={
                               q.correctAnswer === label
                                 ? "text-green-300"
-                                : "text-slate-300"
+                                : "text-zinc-300"
                             }
                           >
                             {value}
@@ -122,7 +122,7 @@ export default async function QuestionsPage({
                       variant="ghost"
                       size="sm"
                       asChild
-                      className="text-slate-400 hover:text-white hover:bg-slate-700"
+                      className="text-zinc-400 hover:text-white hover:bg-zinc-800"
                     >
                       <Link
                         href={`/admin/quizzes/${id}/questions/${q.id}`}

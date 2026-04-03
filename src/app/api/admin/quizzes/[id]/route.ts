@@ -62,6 +62,10 @@ export async function DELETE(
   }
 
   const { id } = await params;
+
+  // Delete dependents first (SQLite doesn't cascade unless schema enforces it)
+  await prisma.quizLink.deleteMany({ where: { quizId: id } });
+  await prisma.quizAttempt.deleteMany({ where: { quizId: id } });
   await prisma.quiz.delete({ where: { id } });
 
   return NextResponse.json({ success: true });

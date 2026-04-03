@@ -56,17 +56,17 @@ export function QuestionDeleteButton({
           <Trash2 className="w-4 h-4" />
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="bg-slate-800 border-slate-700">
+      <AlertDialogContent className="bg-zinc-900 border-zinc-800">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-white">
             Delete Question
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-slate-400">
+          <AlertDialogDescription className="text-zinc-400">
             This will permanently delete this question.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="border-slate-700 text-slate-300 hover:bg-slate-700">
+          <AlertDialogCancel className="border-zinc-800 text-zinc-300 hover:bg-zinc-800">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction

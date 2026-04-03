@@ -99,11 +99,11 @@ export function QuestionForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
       <div className="space-y-2">
-        <Label className="text-slate-300">Question Text</Label>
+        <Label className="text-zinc-300">Question Text</Label>
         <Textarea
           {...register("text")}
           placeholder="Enter the question..."
-          className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 resize-none"
+          className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500 resize-none"
           rows={3}
         />
         {errors.text && (
@@ -112,7 +112,7 @@ export function QuestionForm({
       </div>
 
       <div className="space-y-3">
-        <Label className="text-slate-300">
+        <Label className="text-zinc-300">
           Options (select the correct answer)
         </Label>
         <RadioGroup
@@ -127,14 +127,14 @@ export function QuestionForm({
               <RadioGroupItem
                 value={key}
                 id={`option-${key}`}
-                className="border-slate-600 text-sky-400"
+                className="border-zinc-700 text-amber-400"
               />
               <div className="flex items-center gap-2 flex-1">
                 <span
                   className={`w-6 h-6 rounded flex items-center justify-center text-xs font-bold shrink-0 ${
                     correctAnswer === key
-                      ? "bg-sky-600 text-white"
-                      : "bg-slate-700 text-slate-400"
+                      ? "bg-amber-500 text-black"
+                      : "bg-zinc-800 text-zinc-400"
                   }`}
                 >
                   {label}
@@ -142,7 +142,7 @@ export function QuestionForm({
                 <Input
                   {...register(field)}
                   placeholder={`Option ${label}`}
-                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500"
                 />
               </div>
             </div>
@@ -157,17 +157,17 @@ export function QuestionForm({
       </div>
 
       <div className="space-y-2">
-        <Label className="text-slate-300">Difficulty</Label>
+        <Label className="text-zinc-300">Difficulty</Label>
         <Select
           value={difficulty}
           onValueChange={(val) =>
             setValue("difficulty", val as "EASY" | "MEDIUM" | "HARD")
           }
         >
-          <SelectTrigger className="bg-slate-800 border-slate-700 text-white w-48">
+          <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white w-48">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-slate-800 border-slate-700">
+          <SelectContent className="bg-zinc-900 border-zinc-800">
             <SelectItem value="EASY" className="text-white">Easy</SelectItem>
             <SelectItem value="MEDIUM" className="text-white">Medium</SelectItem>
             <SelectItem value="HARD" className="text-white">Hard</SelectItem>
@@ -179,7 +179,7 @@ export function QuestionForm({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-sky-600 hover:bg-sky-700 text-white"
+          className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black"
         >
           {isSubmitting
             ? "Saving..."
@@ -191,7 +191,7 @@ export function QuestionForm({
           type="button"
           variant="outline"
           onClick={() => router.push(`/admin/quizzes/${quizId}/questions`)}
-          className="border-slate-700 text-slate-300 hover:bg-slate-800"
+          className="border-zinc-800 text-zinc-300 hover:bg-zinc-900"
         >
           Cancel
         </Button>

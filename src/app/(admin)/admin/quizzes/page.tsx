@@ -29,7 +29,7 @@ export default async function QuizzesPage() {
         title="Quizzes"
         description={`${quizzes.length} total quizzes`}
       >
-        <Button asChild className="bg-sky-600 hover:bg-sky-700 text-white">
+        <Button asChild className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black">
           <Link href="/admin/quizzes/new">
             <Plus className="w-4 h-4 mr-2" />
             New Quiz

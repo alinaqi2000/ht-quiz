@@ -65,7 +65,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
 
   if (quizzes.length === 0) {
     return (
-      <div className="text-center py-12 text-slate-500">
+      <div className="text-center py-12 text-zinc-500">
         No quizzes yet. Create your first quiz.
       </div>
     );
@@ -78,7 +78,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
           variant="ghost"
           size="sm"
           asChild
-          className="text-slate-400 hover:text-white hover:bg-slate-700"
+          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
           title="Questions"
         >
           <Link href={`/admin/quizzes/${quiz.id}/questions`}>
@@ -89,7 +89,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
           variant="ghost"
           size="sm"
           asChild
-          className="text-slate-400 hover:text-white hover:bg-slate-700"
+          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
           title="Assign"
         >
           <Link href={`/admin/quizzes/${quiz.id}/assign`}>
@@ -100,7 +100,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
           variant="ghost"
           size="sm"
           asChild
-          className="text-slate-400 hover:text-white hover:bg-slate-700"
+          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
           title="Results"
         >
           <Link href={`/admin/quizzes/${quiz.id}/results`}>
@@ -111,7 +111,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
           variant="ghost"
           size="sm"
           asChild
-          className="text-slate-400 hover:text-white hover:bg-slate-700"
+          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
           title="Edit"
         >
           <Link href={`/admin/quizzes/${quiz.id}`}>
@@ -129,18 +129,18 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
               <Trash2 className="w-4 h-4" />
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className="bg-slate-800 border-slate-700 mx-4">
+          <AlertDialogContent className="bg-zinc-900 border-zinc-800 mx-4">
             <AlertDialogHeader>
               <AlertDialogTitle className="text-white">
                 Delete Quiz
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-slate-400">
+              <AlertDialogDescription className="text-zinc-400">
                 Delete &quot;{quiz.title}&quot;? All questions and attempts will
                 be lost.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className="border-slate-700 text-slate-300 hover:bg-slate-700">
+              <AlertDialogCancel className="border-zinc-800 text-zinc-300 hover:bg-zinc-800">
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction
@@ -163,7 +163,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
         {quizzes.map((quiz) => (
           <div
             key={quiz.id}
-            className="bg-slate-800/60 border border-slate-700 rounded-xl p-4 space-y-3"
+            className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 space-y-3"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -194,7 +194,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
                     className={
                       quiz.isActive
                         ? "border-green-600/50 text-green-400 text-xs"
-                        : "border-slate-600 text-slate-500 text-xs"
+                        : "border-zinc-700 text-zinc-500 text-xs"
                     }
                   >
                     {quiz.isActive ? "Active" : "Inactive"}
@@ -203,7 +203,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
               </div>
               <ActionButtons quiz={quiz} />
             </div>
-            <div className="flex items-center gap-4 text-xs text-slate-500">
+            <div className="flex items-center gap-4 text-xs text-zinc-500">
               <span>{quiz._count.questions} questions</span>
               <span>{quiz.durationMin}min</span>
               <span>{quiz._count.attempts} attempts</span>
@@ -213,25 +213,25 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
       </div>
 
       {/* Desktop table */}
-      <div className="hidden lg:block rounded-lg border border-slate-700 overflow-hidden">
+      <div className="hidden lg:block rounded-lg border border-zinc-800 overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="border-slate-700 hover:bg-transparent">
-              <TableHead className="text-slate-400">Title</TableHead>
-              <TableHead className="text-slate-400">Type</TableHead>
-              <TableHead className="text-slate-400">Difficulty</TableHead>
-              <TableHead className="text-slate-400">Duration</TableHead>
-              <TableHead className="text-slate-400">Questions</TableHead>
-              <TableHead className="text-slate-400">Attempts</TableHead>
-              <TableHead className="text-slate-400">Status</TableHead>
-              <TableHead className="text-slate-400 text-right">Actions</TableHead>
+            <TableRow className="border-zinc-800 hover:bg-transparent">
+              <TableHead className="text-zinc-400">Title</TableHead>
+              <TableHead className="text-zinc-400">Type</TableHead>
+              <TableHead className="text-zinc-400">Difficulty</TableHead>
+              <TableHead className="text-zinc-400">Duration</TableHead>
+              <TableHead className="text-zinc-400">Questions</TableHead>
+              <TableHead className="text-zinc-400">Attempts</TableHead>
+              <TableHead className="text-zinc-400">Status</TableHead>
+              <TableHead className="text-zinc-400 text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {quizzes.map((quiz) => (
               <TableRow
                 key={quiz.id}
-                className="border-slate-700 hover:bg-slate-800/50"
+                className="border-zinc-800 hover:bg-zinc-900/50"
               >
                 <TableCell className="text-white font-medium">
                   {quiz.title}
@@ -260,13 +260,13 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
                     {quiz.difficulty}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-slate-300">
+                <TableCell className="text-zinc-300">
                   {quiz.durationMin}m
                 </TableCell>
-                <TableCell className="text-slate-300">
+                <TableCell className="text-zinc-300">
                   {quiz._count.questions}
                 </TableCell>
-                <TableCell className="text-slate-300">
+                <TableCell className="text-zinc-300">
                   {quiz._count.attempts}
                 </TableCell>
                 <TableCell>
@@ -275,7 +275,7 @@ export function QuizTable({ quizzes }: { quizzes: Quiz[] }) {
                     className={
                       quiz.isActive
                         ? "border-green-600/50 text-green-400"
-                        : "border-slate-600 text-slate-500"
+                        : "border-zinc-700 text-zinc-500"
                     }
                   >
                     {quiz.isActive ? "Active" : "Inactive"}

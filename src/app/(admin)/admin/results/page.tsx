@@ -34,17 +34,17 @@ export default async function ResultsPage() {
       />
 
       <div className="p-6">
-        <div className="rounded-lg border border-slate-700 overflow-hidden">
+        <div className="rounded-lg border border-zinc-800 overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow className="border-slate-700 hover:bg-transparent">
-                <TableHead className="text-slate-400">User</TableHead>
-                <TableHead className="text-slate-400">Quiz</TableHead>
-                <TableHead className="text-slate-400">Status</TableHead>
-                <TableHead className="text-slate-400">Score</TableHead>
-                <TableHead className="text-slate-400">%</TableHead>
-                <TableHead className="text-slate-400">Started</TableHead>
-                <TableHead className="text-slate-400">Submitted</TableHead>
+              <TableRow className="border-zinc-800 hover:bg-transparent">
+                <TableHead className="text-zinc-400">User</TableHead>
+                <TableHead className="text-zinc-400">Quiz</TableHead>
+                <TableHead className="text-zinc-400">Status</TableHead>
+                <TableHead className="text-zinc-400">Score</TableHead>
+                <TableHead className="text-zinc-400">%</TableHead>
+                <TableHead className="text-zinc-400">Started</TableHead>
+                <TableHead className="text-zinc-400">Submitted</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -52,7 +52,7 @@ export default async function ResultsPage() {
                 <TableRow>
                   <TableCell
                     colSpan={7}
-                    className="text-center text-slate-500 py-12"
+                    className="text-center text-zinc-500 py-12"
                   >
                     No attempts yet
                   </TableCell>
@@ -69,17 +69,17 @@ export default async function ResultsPage() {
                   return (
                     <TableRow
                       key={attempt.id}
-                      className="border-slate-700 hover:bg-slate-800/50"
+                      className="border-zinc-800 hover:bg-zinc-900/50"
                     >
                       <TableCell>
                         <p className="text-white text-sm font-medium">
                           {attempt.user.name}
                         </p>
-                        <p className="text-slate-400 text-xs">
+                        <p className="text-zinc-400 text-xs">
                           {attempt.user.email}
                         </p>
                       </TableCell>
-                      <TableCell className="text-slate-300 text-sm">
+                      <TableCell className="text-zinc-300 text-sm">
                         {attempt.quiz.title}
                       </TableCell>
                       <TableCell>
@@ -94,7 +94,7 @@ export default async function ResultsPage() {
                           {attempt.isComplete ? "Done" : "In Progress"}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-slate-300">
+                      <TableCell className="text-zinc-300">
                         {attempt.isComplete
                           ? `${attempt.score}/${attempt.totalPoints}`
                           : "—"}
@@ -113,13 +113,13 @@ export default async function ResultsPage() {
                             {pct}%
                           </span>
                         ) : (
-                          <span className="text-slate-500">—</span>
+                          <span className="text-zinc-500">—</span>
                         )}
                       </TableCell>
-                      <TableCell className="text-slate-400 text-sm">
+                      <TableCell className="text-zinc-400 text-sm">
                         {format(new Date(attempt.startedAt), "MMM d, HH:mm")}
                       </TableCell>
-                      <TableCell className="text-slate-400 text-sm">
+                      <TableCell className="text-zinc-400 text-sm">
                         {attempt.submittedAt
                           ? format(new Date(attempt.submittedAt), "MMM d, HH:mm")
                           : "—"}

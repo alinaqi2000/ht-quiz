@@ -32,7 +32,7 @@ export default async function UsersPage() {
       >
         <Button
           asChild
-          className="bg-sky-600 hover:bg-sky-700 text-white"
+          className="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black"
         >
           <Link href="/admin/users/new">
             <Plus className="w-4 h-4 mr-2" />

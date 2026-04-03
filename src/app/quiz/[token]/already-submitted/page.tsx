@@ -42,7 +42,7 @@ export default async function AlreadySubmittedPage({
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center space-y-6">
         <div className="w-20 h-20 bg-green-900/30 border-2 border-green-500 rounded-full flex items-center justify-center mx-auto">
           <CheckCircle className="w-10 h-10 text-green-400" />
@@ -51,7 +51,7 @@ export default async function AlreadySubmittedPage({
           <h1 className="text-2xl font-bold text-white mb-2">
             Quiz Submitted
           </h1>
-          <p className="text-slate-400">
+          <p className="text-zinc-400">
             You have already submitted{" "}
             <span className="text-white font-medium">
               {quizLink.quiz.title}
@@ -59,7 +59,7 @@ export default async function AlreadySubmittedPage({
             . Your responses have been recorded.
           </p>
         </div>
-        <p className="text-slate-500 text-sm">
+        <p className="text-zinc-500 text-sm">
           Each quiz can only be taken once. Contact your administrator if you
           believe this is an error.
         </p>

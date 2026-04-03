@@ -58,25 +58,25 @@ export default async function QuizResultsPage({
 
       <div className="p-6 space-y-6">
         <div className="grid grid-cols-3 gap-4">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-zinc-900/50 border-zinc-800">
             <CardContent className="pt-6">
-              <p className="text-slate-400 text-sm">Total Attempts</p>
+              <p className="text-zinc-400 text-sm">Total Attempts</p>
               <p className="text-2xl font-bold text-white mt-1">
                 {attempts.length}
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-zinc-900/50 border-zinc-800">
             <CardContent className="pt-6">
-              <p className="text-slate-400 text-sm">Completed</p>
+              <p className="text-zinc-400 text-sm">Completed</p>
               <p className="text-2xl font-bold text-white mt-1">
                 {completed.length}
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-zinc-900/50 border-zinc-800">
             <CardContent className="pt-6">
-              <p className="text-slate-400 text-sm">Average Score</p>
+              <p className="text-zinc-400 text-sm">Average Score</p>
               <p className="text-2xl font-bold text-white mt-1">
                 {avgScore !== null ? `${avgScore}%` : "—"}
               </p>
@@ -84,7 +84,7 @@ export default async function QuizResultsPage({
           </Card>
         </div>
 
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-zinc-900/50 border-zinc-800">
           <CardHeader>
             <CardTitle className="text-white text-base">
               All Attempts
@@ -92,20 +92,20 @@ export default async function QuizResultsPage({
           </CardHeader>
           <CardContent>
             {attempts.length === 0 ? (
-              <p className="text-slate-500 text-sm text-center py-6">
+              <p className="text-zinc-500 text-sm text-center py-6">
                 No attempts yet
               </p>
             ) : (
-              <div className="rounded-lg border border-slate-700 overflow-hidden">
+              <div className="rounded-lg border border-zinc-800 overflow-hidden">
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-slate-700 hover:bg-transparent">
-                      <TableHead className="text-slate-400">User</TableHead>
-                      <TableHead className="text-slate-400">Status</TableHead>
-                      <TableHead className="text-slate-400">Score</TableHead>
-                      <TableHead className="text-slate-400">Percentage</TableHead>
-                      <TableHead className="text-slate-400">Started</TableHead>
-                      <TableHead className="text-slate-400">Submitted</TableHead>
+                    <TableRow className="border-zinc-800 hover:bg-transparent">
+                      <TableHead className="text-zinc-400">User</TableHead>
+                      <TableHead className="text-zinc-400">Status</TableHead>
+                      <TableHead className="text-zinc-400">Score</TableHead>
+                      <TableHead className="text-zinc-400">Percentage</TableHead>
+                      <TableHead className="text-zinc-400">Started</TableHead>
+                      <TableHead className="text-zinc-400">Submitted</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -120,13 +120,13 @@ export default async function QuizResultsPage({
                       return (
                         <TableRow
                           key={attempt.id}
-                          className="border-slate-700 hover:bg-slate-800/50"
+                          className="border-zinc-800 hover:bg-zinc-900/50"
                         >
                           <TableCell>
                             <p className="text-white text-sm font-medium">
                               {attempt.user.name}
                             </p>
-                            <p className="text-slate-400 text-xs">
+                            <p className="text-zinc-400 text-xs">
                               {attempt.user.email}
                             </p>
                           </TableCell>
@@ -142,7 +142,7 @@ export default async function QuizResultsPage({
                               {attempt.isComplete ? "Completed" : "In Progress"}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-slate-300">
+                          <TableCell className="text-zinc-300">
                             {attempt.isComplete
                               ? `${attempt.score}/${attempt.totalPoints}`
                               : "—"}
@@ -161,13 +161,13 @@ export default async function QuizResultsPage({
                                 {pct}%
                               </span>
                             ) : (
-                              <span className="text-slate-500">—</span>
+                              <span className="text-zinc-500">—</span>
                             )}
                           </TableCell>
-                          <TableCell className="text-slate-400 text-sm">
+                          <TableCell className="text-zinc-400 text-sm">
                             {format(new Date(attempt.startedAt), "MMM d, HH:mm")}
                           </TableCell>
-                          <TableCell className="text-slate-400 text-sm">
+                          <TableCell className="text-zinc-400 text-sm">
                             {attempt.submittedAt
                               ? format(
                                   new Date(attempt.submittedAt),

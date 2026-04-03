@@ -93,18 +93,18 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-zinc-900/50 border-zinc-800">
             <CardHeader>
               <CardTitle className="text-white text-base">
                 Recent Submissions
               </CardTitle>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-zinc-400">
                 Latest quiz completions
               </CardDescription>
             </CardHeader>
             <CardContent>
               {recentAttempts.length === 0 ? (
-                <p className="text-slate-500 text-sm text-center py-6">
+                <p className="text-zinc-500 text-sm text-center py-6">
                   No submissions yet
                 </p>
               ) : (
@@ -112,23 +112,23 @@ export default async function DashboardPage() {
                   {recentAttempts.map((attempt) => (
                     <div
                       key={attempt.id}
-                      className="flex items-center justify-between py-2 border-b border-slate-700/50 last:border-0"
+                      className="flex items-center justify-between py-2 border-b border-zinc-800/50 last:border-0"
                     >
                       <div>
                         <p className="text-sm font-medium text-white">
                           {attempt.user.name}
                         </p>
-                        <p className="text-xs text-slate-400">
+                        <p className="text-xs text-zinc-400">
                           {attempt.quiz.title}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-sky-400">
+                        <p className="text-sm font-medium text-amber-400">
                           {attempt.totalPoints
                             ? `${attempt.score}/${attempt.totalPoints}`
                             : "—"}
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-zinc-500">
                           {attempt.submittedAt
                             ? format(new Date(attempt.submittedAt), "MMM d, HH:mm")
                             : "—"}
@@ -141,18 +141,18 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-zinc-900/50 border-zinc-800">
             <CardHeader>
               <CardTitle className="text-white text-base">
                 Quiz Performance
               </CardTitle>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-zinc-400">
                 Participation per quiz
               </CardDescription>
             </CardHeader>
             <CardContent>
               {quizStats.length === 0 ? (
-                <p className="text-slate-500 text-sm text-center py-6">
+                <p className="text-zinc-500 text-sm text-center py-6">
                   No quizzes yet
                 </p>
               ) : (
@@ -160,7 +160,7 @@ export default async function DashboardPage() {
                   {quizStats.map((quiz) => (
                     <div
                       key={quiz.id}
-                      className="flex items-center justify-between py-2 border-b border-slate-700/50 last:border-0"
+                      className="flex items-center justify-between py-2 border-b border-zinc-800/50 last:border-0"
                     >
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-medium text-white">
@@ -180,7 +180,7 @@ export default async function DashboardPage() {
                       <div className="flex items-center gap-2">
                         <Badge
                           variant="outline"
-                          className="border-slate-600 text-slate-300 text-xs"
+                          className="border-zinc-700 text-zinc-300 text-xs"
                         >
                           {quiz._count.attempts} attempts
                         </Badge>

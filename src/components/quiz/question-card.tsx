@@ -39,24 +39,12 @@ export function QuestionCard({
   onAnswer,
 }: QuestionCardProps) {
   return (
-    <div className="bg-slate-800/60 border border-slate-700 rounded-xl p-4 sm:p-6">
+    <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 sm:p-6">
       <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-5">
-        <div className="w-8 h-8 bg-sky-600/20 border border-sky-600/40 rounded-lg flex items-center justify-center shrink-0">
-          <span className="text-sky-400 text-sm font-bold">{index + 1}</span>
+        <div className="w-8 h-8 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-center justify-center shrink-0">
+          <span className="text-amber-400 text-sm font-bold">{index + 1}</span>
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1.5">
-            <span
-              className={cn(
-                "text-xs px-2 py-0.5 rounded border font-medium",
-                difficultyColors[
-                  question.difficulty as keyof typeof difficultyColors
-                ]
-              )}
-            >
-              {question.difficulty}
-            </span>
-          </div>
           <p className="text-white text-sm sm:text-base font-medium leading-relaxed">
             {question.text}
           </p>
@@ -74,16 +62,16 @@ export function QuestionCard({
               className={cn(
                 "flex items-center gap-3 p-3 rounded-lg border text-left transition-all active:scale-[0.98]",
                 isSelected
-                  ? "bg-sky-600/20 border-sky-500 shadow-sky-500/10 shadow-sm"
-                  : "bg-slate-700/50 border-slate-600 hover:bg-slate-700 hover:border-slate-500"
+                  ? "bg-amber-500/10 border-amber-400 shadow-amber-500/10 shadow-sm"
+                  : "bg-zinc-800/50 border-zinc-700 hover:bg-zinc-800 hover:border-zinc-600"
               )}
             >
               <div
                 className={cn(
                   "w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shrink-0",
                   isSelected
-                    ? "bg-sky-600 text-white"
-                    : "bg-slate-600 text-slate-400"
+                    ? "bg-amber-500 text-black"
+                    : "bg-zinc-700 text-zinc-400"
                 )}
               >
                 {key}
@@ -91,7 +79,7 @@ export function QuestionCard({
               <span
                 className={cn(
                   "text-sm",
-                  isSelected ? "text-white font-medium" : "text-slate-300"
+                  isSelected ? "text-white font-medium" : "text-zinc-300"
                 )}
               >
                 {question[field]}
