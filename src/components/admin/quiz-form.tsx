@@ -137,7 +137,7 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
             {...register("durationMin", { valueAsNumber: true })}
             type="number"
             min={1}
-            max={180}
+            max={300}
             className="bg-zinc-900 border-zinc-800 text-white"
           />
           {errors.durationMin && (
