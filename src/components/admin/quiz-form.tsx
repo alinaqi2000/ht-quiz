@@ -21,7 +21,7 @@ const schema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
-  durationMin: z.number().min(1).max(180),
+  durationMin: z.number().min(1).max(300),
   type: z.enum(["PUBLIC", "PRIVATE"]),
   isActive: z.boolean(),
 });
