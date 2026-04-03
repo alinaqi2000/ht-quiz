@@ -91,6 +91,25 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
     }
   }, [submitted, submitting, handleSubmit]);
 
+  // Block all keyboard events and copy actions for security
+  useEffect(() => {
+    const blockKey = (e: KeyboardEvent) => e.preventDefault();
+    const blockCopy = (e: ClipboardEvent) => e.preventDefault();
+    const blockContext = (e: MouseEvent) => e.preventDefault();
+    document.addEventListener("keydown", blockKey, true);
+    document.addEventListener("keyup", blockKey, true);
+    document.addEventListener("copy", blockCopy, true);
+    document.addEventListener("cut", blockCopy, true);
+    document.addEventListener("contextmenu", blockContext, true);
+    return () => {
+      document.removeEventListener("keydown", blockKey, true);
+      document.removeEventListener("keyup", blockKey, true);
+      document.removeEventListener("copy", blockCopy, true);
+      document.removeEventListener("cut", blockCopy, true);
+      document.removeEventListener("contextmenu", blockContext, true);
+    };
+  }, []);
+
   const answered = Object.keys(answers).length;
   const progress = questions.length > 0 ? (answered / questions.length) * 100 : 0;
 
@@ -118,7 +137,10 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div
+      className="min-h-screen bg-black"
+      style={{ userSelect: "none" }}
+    >
       {/* Sticky header */}
       <div className="sticky top-0 z-10 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
         <div className="max-w-3xl mx-auto px-3 sm:px-4 py-3">
