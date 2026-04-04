@@ -3,10 +3,16 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { translate } from "@vitalets/google-translate-api";
 
-async function translateText(text: string): Promise<string> {
-  if (!text?.trim()) return text;
-  const res = await translate(text, { to: "ur" });
-  return res.text;
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Translates multiple texts in one API call by joining with a separator
+async function translateBatch(texts: string[], to: string): Promise<string[]> {
+  const SEP = "\n||||\n";
+  const joined = texts.join(SEP);
+  const res = await translate(joined, { to });
+  const parts = res.text.split(SEP);
+  // Fallback: if split count doesn't match, return raw parts
+  return texts.map((_, i) => parts[i]?.trim() ?? texts[i]);
 }
 
 export async function POST(req: NextRequest) {
@@ -16,6 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
+  const to: string = body.targetLang ?? "ur";
 
   // If quizId provided: translate all questions in the quiz
   if (body.quizId) {
@@ -28,21 +35,19 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      await Promise.all(
-        questions.map(async (q) => {
-          const [text, optionA, optionB, optionC, optionD] = await Promise.all([
-            translateText(q.text),
-            translateText(q.optionA),
-            translateText(q.optionB),
-            translateText(q.optionC),
-            translateText(q.optionD),
-          ]);
-          await prisma.question.update({
-            where: { id: q.id },
-            data: { text, optionA, optionB, optionC, optionD },
-          });
-        })
-      );
+      for (let i = 0; i < questions.length; i++) {
+        const q = questions[i];
+        const [text, optionA, optionB, optionC, optionD] = await translateBatch(
+          [q.text, q.optionA, q.optionB, q.optionC, q.optionD],
+          to
+        );
+        await prisma.question.update({
+          where: { id: q.id },
+          data: { text, optionA, optionB, optionC, optionD },
+        });
+        // Delay between questions to avoid rate limiting
+        if (i < questions.length - 1) await delay(600);
+      }
       return NextResponse.json({ translated: questions.length });
     } catch (err) {
       console.error("Translation error:", err);
@@ -60,7 +65,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const translations = await Promise.all(texts.map(translateText));
+    const translations = await translateBatch(texts, to);
     return NextResponse.json({ translations });
   } catch (err) {
     console.error("Translation error:", err);

@@ -6,16 +6,26 @@ import { toast } from "sonner";
 import { Upload, Download, Languages } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+// Detects Urdu/Arabic script characters
+function isUrduText(text: string): boolean {
+  return /[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text);
+}
+
 interface QuestionImportTranslateProps {
   quizId: string;
   questionCount: number;
+  sampleText: string;
 }
 
-export function QuestionImportTranslate({ quizId, questionCount }: QuestionImportTranslateProps) {
+export function QuestionImportTranslate({ quizId, questionCount, sampleText }: QuestionImportTranslateProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [importing, setImporting] = useState(false);
   const [translating, setTranslating] = useState(false);
   const router = useRouter();
+
+  const currentlyUrdu = isUrduText(sampleText);
+  const targetLang = currentlyUrdu ? "en" : "ur";
+  const targetLabel = currentlyUrdu ? "Translate to English" : "Translate to Urdu";
 
   async function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -66,7 +76,7 @@ export function QuestionImportTranslate({ quizId, questionCount }: QuestionImpor
     const res = await fetch(`/api/admin/translate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ quizId }),
+      body: JSON.stringify({ quizId, targetLang }),
     });
 
     setTranslating(false);
@@ -77,7 +87,7 @@ export function QuestionImportTranslate({ quizId, questionCount }: QuestionImpor
       return;
     }
 
-    toast.success("Questions translated to Urdu");
+    toast.success(`Questions translated to ${targetLang === "ur" ? "Urdu" : "English"}`);
     router.refresh();
   }
 
@@ -87,7 +97,6 @@ export function QuestionImportTranslate({ quizId, questionCount }: QuestionImpor
 
   return (
     <div className="flex flex-wrap gap-2">
-      {/* Download sample */}
       <Button
         variant="outline"
         size="sm"
@@ -98,7 +107,6 @@ export function QuestionImportTranslate({ quizId, questionCount }: QuestionImpor
         Sample CSV
       </Button>
 
-      {/* Import */}
       <Button
         variant="outline"
         size="sm"
@@ -117,7 +125,6 @@ export function QuestionImportTranslate({ quizId, questionCount }: QuestionImpor
         onChange={handleImport}
       />
 
-      {/* Translate to Urdu */}
       {questionCount > 0 && (
         <Button
           variant="outline"
@@ -127,7 +134,7 @@ export function QuestionImportTranslate({ quizId, questionCount }: QuestionImpor
           className="border-emerald-700/50 text-emerald-400 hover:bg-emerald-900/20 hover:text-emerald-300"
         >
           <Languages className="w-3.5 h-3.5 mr-1.5" />
-          {translating ? "Translating..." : "Translate to Urdu"}
+          {translating ? "Translating..." : targetLabel}
         </Button>
       )}
     </div>

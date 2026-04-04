@@ -53,7 +53,11 @@ export default async function QuestionsPage({
               <Link href={`/admin/quizzes/${id}/results`}>View Results</Link>
             </Button>
           </div>
-          <QuestionImportTranslate quizId={id} questionCount={quiz.questions.length} />
+          <QuestionImportTranslate
+            quizId={id}
+            questionCount={quiz.questions.length}
+            sampleText={quiz.questions[0]?.text ?? ""}
+          />
         </div>
 
         {quiz.questions.length === 0 ? (
