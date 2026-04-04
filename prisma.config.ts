@@ -7,6 +7,7 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
+    url: process.env.DATABASE_URL ?? "file:./dev.db",
     adapter: new PrismaLibSql({
       url: process.env.DATABASE_URL ?? "file:./dev.db",
       authToken: process.env.DATABASE_AUTH_TOKEN,

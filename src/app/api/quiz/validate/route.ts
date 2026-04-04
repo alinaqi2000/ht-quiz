@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   }
 
   // For private quizzes, check if already used
-  if (quizLink.userId && quizLink.used) {
+  if (quizLink.linkType === "PRIVATE" && quizLink.userId && quizLink.used) {
     return NextResponse.json(
       { error: "This link has already been used", alreadyUsed: true },
       { status: 409 }
@@ -60,6 +60,8 @@ export async function POST(req: NextRequest) {
     valid: true,
     quiz: quizLink.quiz,
     linkedUser: quizLink.user,
-    isPublic: !quizLink.userId,
+    isPublic: quizLink.linkType === "PUBLIC",
+    isInternal: quizLink.linkType === "INTERNAL",
+    isPrivate: quizLink.linkType === "PRIVATE",
   });
 }

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Copy, CheckCircle, Clock, Globe, Trash2, Link as LinkIcon } from "lucide-react";
+import { Copy, CheckCircle, Clock, Globe, Trash2, Link as LinkIcon, Shield } from "lucide-react";
 import { format } from "date-fns";
 
 interface User {
@@ -25,6 +25,7 @@ interface QuizLink {
   usedAt: string | null;
   createdAt: string;
   expiresAt: string | null;
+  linkType: string;
 }
 
 interface AssignFormProps {
@@ -32,6 +33,7 @@ interface AssignFormProps {
   users: User[];
   existingLinks: QuizLink[];
   existingPublicLinks: QuizLink[];
+  existingInternalLinks: QuizLink[];
 }
 
 export function AssignForm({
@@ -39,14 +41,18 @@ export function AssignForm({
   users,
   existingLinks,
   existingPublicLinks,
+  existingInternalLinks,
 }: AssignFormProps) {
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [expiresAt, setExpiresAt] = useState("");
   const [publicExpiresAt, setPublicExpiresAt] = useState("");
+  const [internalExpiresAt, setInternalExpiresAt] = useState("");
   const [loading, setLoading] = useState(false);
   const [publicLoading, setPublicLoading] = useState(false);
+  const [internalLoading, setInternalLoading] = useState(false);
   const [generatedLinks, setGeneratedLinks] = useState<QuizLink[]>([]);
   const [publicLinks, setPublicLinks] = useState<QuizLink[]>(existingPublicLinks);
+  const [internalLinks, setInternalLinks] = useState<QuizLink[]>(existingInternalLinks);
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -86,9 +92,29 @@ export function AssignForm({
     }
 
     const link = await res.json();
-    setPublicLinks((prev) => [link, ...prev]);
+    setPublicLinks((prev) => [{ ...link, linkType: "PUBLIC" }, ...prev]);
     setPublicExpiresAt("");
     toast.success("Public link generated!");
+  }
+
+  async function handleGenerateInternalLink() {
+    setInternalLoading(true);
+    const res = await fetch(`/api/admin/quizzes/${quizId}/internal-link`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ expiresAt: internalExpiresAt || undefined }),
+    });
+    setInternalLoading(false);
+
+    if (!res.ok) {
+      toast.error("Failed to generate internal link");
+      return;
+    }
+
+    const link = await res.json();
+    setInternalLinks((prev) => [link, ...prev]);
+    setInternalExpiresAt("");
+    toast.success("Internal link generated!");
   }
 
   async function handleDeletePublicLink(linkId: string) {
@@ -106,6 +132,24 @@ export function AssignForm({
     }
 
     setPublicLinks((prev) => prev.filter((l) => l.id !== linkId));
+    toast.success("Link deleted");
+  }
+
+  async function handleDeleteInternalLink(linkId: string) {
+    setDeletingId(linkId);
+    const res = await fetch(`/api/admin/quizzes/${quizId}/internal-link`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ linkId }),
+    });
+    setDeletingId(null);
+
+    if (!res.ok) {
+      toast.error("Failed to delete link");
+      return;
+    }
+
+    setInternalLinks((prev) => prev.filter((l) => l.id !== linkId));
     toast.success("Link deleted");
   }
 
@@ -220,6 +264,98 @@ export function AssignForm({
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeletePublicLink(link.id)}
+                        disabled={deletingId === link.id}
+                        className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-zinc-800" />
+
+      {/* ── INTERNAL LINK SECTION ── */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Shield className="w-4 h-4 text-blue-400" />
+          <h2 className="text-white font-semibold">Internal Link</h2>
+          <Badge variant="outline" className="border-blue-500/40 text-blue-400 text-xs">
+            Registered users only
+          </Badge>
+        </div>
+        <p className="text-zinc-400 text-sm">
+          Share a link that only registered (logged-in) users can access. No per-user assignment needed.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 space-y-1">
+            <Label className="text-zinc-400 text-xs">Expiry (optional)</Label>
+            <Input
+              type="datetime-local"
+              value={internalExpiresAt}
+              onChange={(e) => setInternalExpiresAt(e.target.value)}
+              className="bg-zinc-900 border-zinc-800 text-white"
+            />
+          </div>
+          <div className="sm:self-end">
+            <Button
+              onClick={handleGenerateInternalLink}
+              disabled={internalLoading}
+              className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              {internalLoading ? "Generating..." : "Generate Internal Link"}
+            </Button>
+          </div>
+        </div>
+
+        {internalLinks.length > 0 && (
+          <div className="space-y-2">
+            {internalLinks.map((link) => (
+              <Card key={link.id} className="bg-zinc-900/50 border-blue-500/15">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                        <Badge variant="outline" className="border-blue-500/40 text-blue-400 text-xs">
+                          Internal
+                        </Badge>
+                        {link.expiresAt && (
+                          <span className="text-xs text-zinc-500">
+                            Expires {format(new Date(link.expiresAt), "MMM d, yyyy HH:mm")}
+                          </span>
+                        )}
+                      </div>
+                      <code className="text-xs text-blue-400 break-all block">
+                        {baseUrl}/quiz/{link.token}
+                      </code>
+                      <p className="text-xs text-zinc-500 mt-1">
+                        Created {format(new Date(link.createdAt), "MMM d, HH:mm")}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyLink(link.token)}
+                        className="text-zinc-400 hover:text-white"
+                      >
+                        {copiedToken === link.token ? (
+                          <CheckCircle className="w-4 h-4 text-green-400" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteInternalLink(link.id)}
                         disabled={deletingId === link.id}
                         className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
                       >

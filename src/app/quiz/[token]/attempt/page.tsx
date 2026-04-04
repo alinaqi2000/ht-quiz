@@ -6,10 +6,13 @@ import { QuizShell } from "@/components/quiz/quiz-shell";
 
 export default async function QuizAttemptPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ token: string }>;
+  searchParams: Promise<{ uid?: string }>;
 }) {
   const { token } = await params;
+  const { uid } = await searchParams;
 
   const quizLink = await prisma.quizLink.findUnique({
     where: { token },
@@ -40,17 +43,21 @@ export default async function QuizAttemptPage({
     redirect(`/quiz/${token}`);
   }
 
-  // Find attempt: for private links use the linked userId directly.
-  // For public links, find the most recent incomplete attempt for this quiz.
+  const session = await auth();
+
   let attempt;
 
-  if (quizLink.userId) {
+  if (quizLink.linkType === "PRIVATE" && quizLink.userId) {
     attempt = await prisma.quizAttempt.findUnique({
       where: { userId_quizId: { userId: quizLink.userId, quizId: quizLink.quizId } },
     });
+  } else if (quizLink.linkType === "INTERNAL" && uid) {
+    // Internal link: userId passed via query param from the entry page
+    attempt = await prisma.quizAttempt.findUnique({
+      where: { userId_quizId: { userId: uid, quizId: quizLink.quizId } },
+    });
   } else {
-    // Public quiz — find the latest incomplete attempt (user just created it via POST)
-    const session = await auth();
+    // Public — find attempt by session user, or most recent incomplete
     if (session?.user?.id) {
       attempt = await prisma.quizAttempt.findUnique({
         where: { userId_quizId: { userId: session.user.id, quizId: quizLink.quizId } },
@@ -65,16 +72,33 @@ export default async function QuizAttemptPage({
   }
 
   if (!attempt) {
-    // No attempt started yet — redirect to entry
     redirect(`/quiz/${token}`);
   }
 
+  if (attempt.isComplete) {
+    redirect(`/quiz/${token}/already-submitted`);
+  }
+
   const quiz = quizLink.quiz;
+
+  // Reorder questions by stored questionOrder
+  let questions = quiz.questions;
+  if (attempt.questionOrder) {
+    try {
+      const order: string[] = JSON.parse(attempt.questionOrder);
+      const qMap = new Map(questions.map((q) => [q.id, q]));
+      const reordered = order.map((id) => qMap.get(id)).filter(Boolean) as typeof questions;
+      const inOrder = new Set(order);
+      const extras = questions.filter((q) => !inOrder.has(q.id));
+      questions = [...reordered, ...extras];
+    } catch {}
+  }
 
   return (
     <QuizShell
       attempt={{
         id: attempt.id,
+        userId: attempt.userId,
         startedAt: attempt.startedAt.toISOString(),
         answers: JSON.parse(attempt.answers || "{}") as Record<string, string>,
         isComplete: attempt.isComplete,
@@ -84,7 +108,8 @@ export default async function QuizAttemptPage({
         title: quiz.title,
         durationMin: quiz.durationMin,
       }}
-      questions={quiz.questions}
+      questions={questions}
+      token={token}
     />
   );
 }

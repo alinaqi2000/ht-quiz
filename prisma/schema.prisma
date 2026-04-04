@@ -22,6 +22,12 @@ enum QuizType {
   PRIVATE
 }
 
+enum LinkType {
+  PUBLIC
+  PRIVATE
+  INTERNAL
+}
+
 model User {
   id            String   @id @default(cuid())
   name          String
@@ -70,15 +76,16 @@ model Question {
 }
 
 model QuizAttempt {
-  id          String    @id @default(cuid())
-  userId      String
-  quizId      String
-  answers     String    @default("{}")
-  score       Int?
-  totalPoints Int?
-  startedAt   DateTime  @default(now())
-  submittedAt DateTime?
-  isComplete  Boolean   @default(false)
+  id            String    @id @default(cuid())
+  userId        String
+  quizId        String
+  answers       String    @default("{}")
+  questionOrder String    @default("")
+  score         Int?
+  totalPoints   Int?
+  startedAt     DateTime  @default(now())
+  submittedAt   DateTime?
+  isComplete    Boolean   @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
@@ -91,6 +98,7 @@ model QuizLink {
   userId    String?
   quizId    String
   token     String    @unique
+  linkType  LinkType  @default(PUBLIC)
   used      Boolean   @default(false)
   usedAt    DateTime?
   expiresAt DateTime?

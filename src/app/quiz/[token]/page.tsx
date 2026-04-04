@@ -36,7 +36,7 @@ export default async function QuizEntryPage({
 
   const session = await auth();
 
-  // Check if already submitted
+  // Check if already submitted (for logged-in users)
   if (session?.user?.id) {
     const existingAttempt = await prisma.quizAttempt.findUnique({
       where: {
@@ -51,14 +51,13 @@ export default async function QuizEntryPage({
       redirect(`/quiz/${token}/already-submitted`);
     }
 
-    // If incomplete attempt exists and it's a private link, go to attempt
     if (existingAttempt && !existingAttempt.isComplete) {
       redirect(`/quiz/${token}/attempt`);
     }
   }
 
   // For private quizzes, if linked user matches session, redirect to attempt
-  if (quizLink.userId && session?.user?.id === quizLink.userId) {
+  if (quizLink.linkType === "PRIVATE" && quizLink.userId && session?.user?.id === quizLink.userId) {
     if (!quizLink.used) {
       redirect(`/quiz/${token}/attempt`);
     }
@@ -75,10 +74,13 @@ export default async function QuizEntryPage({
       token={token}
       quiz={JSON.parse(JSON.stringify(quizLink.quiz))}
       linkedUser={quizLink.user ? JSON.parse(JSON.stringify(quizLink.user)) : null}
-      isPrivate={!!quizLink.userId}
+      isPrivate={quizLink.linkType === "PRIVATE"}
+      isInternal={quizLink.linkType === "INTERNAL"}
       alreadyUsed={quizLink.used}
       groupLeaders={groupLeaders}
       sessionUserId={session?.user?.id}
+      sessionUserName={session?.user?.name}
+      sessionUserEmail={session?.user?.email}
     />
   );
 }

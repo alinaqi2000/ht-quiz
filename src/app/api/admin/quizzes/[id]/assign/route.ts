@@ -33,6 +33,7 @@ export async function POST(
           quizId,
           userId,
           token,
+          linkType: "PRIVATE",
           expiresAt: expiresAt ? new Date(expiresAt) : null,
         },
         include: {

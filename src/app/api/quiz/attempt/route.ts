@@ -3,6 +3,28 @@ import { prisma } from "@/lib/prisma";
 import { autosaveSchema, startAttemptSchema } from "@/schemas/attempt.schema";
 import bcrypt from "bcryptjs";
 
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function reorderByStoredOrder<T extends { id: string }>(questions: T[], orderJson: string): T[] {
+  try {
+    const order: string[] = JSON.parse(orderJson);
+    const qMap = new Map(questions.map((q) => [q.id, q]));
+    const reordered = order.map((id) => qMap.get(id)).filter(Boolean) as T[];
+    const inOrder = new Set(order);
+    const extras = questions.filter((q) => !inOrder.has(q.id));
+    return [...reordered, ...extras];
+  } catch {
+    return questions;
+  }
+}
+
 // POST: Start a new attempt or return existing incomplete attempt
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -31,8 +53,21 @@ export async function POST(req: NextRequest) {
 
   let userId = quizLink.userId;
 
-  // For public quizzes — find or create user
-  if (!userId) {
+  if (quizLink.linkType === "INTERNAL") {
+    // Internal link: verify by email — user must be registered
+    if (!email) {
+      return NextResponse.json({ error: "Email required for this quiz" }, { status: 400 });
+    }
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return NextResponse.json(
+        { error: "This email is not registered in the system. Please contact your administrator." },
+        { status: 403 }
+      );
+    }
+    userId = user.id;
+  } else if (!userId) {
+    // Public link: find or create user from name/email
     if (!name || !email) {
       return NextResponse.json(
         { error: "Name and email required for public quiz" },
@@ -51,62 +86,63 @@ export async function POST(req: NextRequest) {
   }
   // Private quiz: the token itself proves identity — no login required
 
+  const allQuestions = await prisma.question.findMany({
+    where: { quizId: quizLink.quizId },
+    orderBy: { order: "asc" },
+    select: { id: true, text: true, optionA: true, optionB: true, optionC: true, optionD: true, difficulty: true, order: true },
+  });
+
   // Check for existing attempt
   const existingAttempt = await prisma.quizAttempt.findUnique({
     where: { userId_quizId: { userId: userId!, quizId: quizLink.quizId } },
-    include: {
-      quiz: {
-        include: {
-          questions: {
-            orderBy: { order: "asc" },
-            select: { id: true, text: true, optionA: true, optionB: true, optionC: true, optionD: true, difficulty: true, order: true },
-          },
-        },
-      },
-    },
+    include: { quiz: { select: { id: true, title: true, durationMin: true, type: true } } },
   });
 
   if (existingAttempt?.isComplete) {
     return NextResponse.json(
-      { error: "Quiz already completed", alreadySubmitted: true },
+      { error: "Quiz already completed", alreadySubmitted: true, attemptId: existingAttempt.id, userId: existingAttempt.userId },
       { status: 409 }
     );
   }
 
   if (existingAttempt) {
+    const questions = existingAttempt.questionOrder
+      ? reorderByStoredOrder(allQuestions, existingAttempt.questionOrder)
+      : allQuestions;
+
     return NextResponse.json({
       attempt: { ...existingAttempt, answers: JSON.parse(existingAttempt.answers) },
       quiz: existingAttempt.quiz,
-      questions: existingAttempt.quiz.questions,
+      questions,
     });
   }
 
   // Mark private link as used
-  if (quizLink.userId) {
+  if (quizLink.linkType === "PRIVATE" && quizLink.userId) {
     await prisma.quizLink.update({
       where: { id: quizLink.id },
       data: { used: true, usedAt: new Date() },
     });
   }
 
+  // Shuffle questions for this attempt
+  const shuffledQuestions = shuffleArray(allQuestions);
+  const questionOrder = JSON.stringify(shuffledQuestions.map((q) => q.id));
+
   const attempt = await prisma.quizAttempt.create({
-    data: { userId: userId!, quizId: quizLink.quizId, answers: "{}" },
-    include: {
-      quiz: {
-        include: {
-          questions: {
-            orderBy: { order: "asc" },
-            select: { id: true, text: true, optionA: true, optionB: true, optionC: true, optionD: true, difficulty: true, order: true },
-          },
-        },
-      },
+    data: {
+      userId: userId!,
+      quizId: quizLink.quizId,
+      answers: "{}",
+      questionOrder,
     },
+    include: { quiz: { select: { id: true, title: true, durationMin: true, type: true } } },
   });
 
   return NextResponse.json({
     attempt: { ...attempt, answers: {} },
     quiz: attempt.quiz,
-    questions: attempt.quiz.questions,
+    questions: shuffledQuestions,
   });
 }
 

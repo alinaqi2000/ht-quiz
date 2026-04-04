@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 export default async function AlreadySubmittedPage({
   params,
@@ -41,6 +42,11 @@ export default async function AlreadySubmittedPage({
     });
   }
 
+  const pct =
+    attempt?.isComplete && attempt.totalPoints
+      ? Math.round(((attempt.score || 0) / attempt.totalPoints) * 100)
+      : null;
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center space-y-6">
@@ -58,7 +64,26 @@ export default async function AlreadySubmittedPage({
             </span>
             . Your responses have been recorded.
           </p>
+          {pct !== null && (
+            <p className="text-lg font-semibold mt-3">
+              <span
+                className={
+                  pct >= 70 ? "text-green-400" : pct >= 50 ? "text-yellow-400" : "text-red-400"
+                }
+              >
+                Score: {attempt!.score}/{attempt!.totalPoints} ({pct}%)
+              </span>
+            </p>
+          )}
         </div>
+        {attempt?.id && (
+          <Link
+            href={`/quiz/${token}/results/${attempt.id}`}
+            className="inline-block bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black font-semibold px-6 py-3 rounded-lg text-sm"
+          >
+            View Detailed Results
+          </Link>
+        )}
         <p className="text-zinc-500 text-sm">
           Each quiz can only be taken once. Contact your administrator if you
           believe this is an error.

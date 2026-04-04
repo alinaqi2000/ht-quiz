@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { QuestionDeleteButton } from "./question-delete-button";
+import { QuestionImportTranslate } from "@/components/admin/question-import-translate";
 
 export default async function QuestionsPage({
   params,
@@ -43,13 +44,16 @@ export default async function QuestionsPage({
       </AdminHeader>
 
       <div className="p-6 space-y-3">
-        <div className="flex gap-3 mb-4">
-          <Button asChild variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-900">
-            <Link href={`/admin/quizzes/${id}/assign`}>Assign Quiz</Link>
-          </Button>
-          <Button asChild variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-900">
-            <Link href={`/admin/quizzes/${id}/results`}>View Results</Link>
-          </Button>
+        <div className="flex flex-wrap gap-3 mb-4 items-center justify-between">
+          <div className="flex gap-2">
+            <Button asChild variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-900">
+              <Link href={`/admin/quizzes/${id}/assign`}>Assign Quiz</Link>
+            </Button>
+            <Button asChild variant="outline" className="border-zinc-800 text-zinc-300 hover:bg-zinc-900">
+              <Link href={`/admin/quizzes/${id}/results`}>View Results</Link>
+            </Button>
+          </div>
+          <QuestionImportTranslate quizId={id} questionCount={quiz.questions.length} />
         </div>
 
         {quiz.questions.length === 0 ? (

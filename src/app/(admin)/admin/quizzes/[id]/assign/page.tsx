@@ -27,14 +27,15 @@ export default async function AssignQuizPage({
 
   if (!quiz) notFound();
 
-  const privateLinks = existingLinks.filter((l) => l.userId !== null);
-  const publicLinks = existingLinks.filter((l) => l.userId === null);
+  const privateLinks = existingLinks.filter((l) => l.linkType === "PRIVATE");
+  const publicLinks = existingLinks.filter((l) => l.linkType === "PUBLIC");
+  const internalLinks = existingLinks.filter((l) => l.linkType === "INTERNAL");
 
   return (
     <div className="flex flex-col flex-1">
       <AdminHeader
         title={`Assign — ${quiz.title}`}
-        description="Generate quiz links for users or share a public link"
+        description="Generate quiz links for users or share a public/internal link"
       />
       <div className="p-4 sm:p-6">
         <AssignForm
@@ -42,6 +43,7 @@ export default async function AssignQuizPage({
           users={users}
           existingLinks={JSON.parse(JSON.stringify(privateLinks))}
           existingPublicLinks={JSON.parse(JSON.stringify(publicLinks))}
+          existingInternalLinks={JSON.parse(JSON.stringify(internalLinks))}
         />
       </div>
     </div>

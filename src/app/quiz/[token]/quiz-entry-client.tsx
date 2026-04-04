@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Clock, HelpCircle, BookOpen, AlertTriangle } from "lucide-react";
+import { Clock, HelpCircle, BookOpen, AlertTriangle, Shield } from "lucide-react";
 
 interface Quiz {
   id: string;
@@ -35,9 +35,12 @@ interface QuizEntryClientProps {
   quiz: Quiz;
   linkedUser: User | null;
   isPrivate: boolean;
+  isInternal: boolean;
   alreadyUsed: boolean;
   groupLeaders: User[];
   sessionUserId?: string;
+  sessionUserName?: string | null;
+  sessionUserEmail?: string | null;
 }
 
 export function QuizEntryClient({
@@ -45,6 +48,7 @@ export function QuizEntryClient({
   quiz,
   linkedUser,
   isPrivate,
+  isInternal,
   alreadyUsed,
   groupLeaders,
 }: QuizEntryClientProps) {
@@ -70,11 +74,22 @@ export function QuizEntryClient({
     );
   }
 
+  // For public: need name + email. For internal: email only. For private: linked user shown.
+  const isPublicEntry = !isPrivate && !isInternal && !linkedUser;
+
   async function handleStart() {
     setStarting(true);
 
     const body: Record<string, string> = { token };
-    if (!isPrivate || !linkedUser) {
+
+    if (isInternal) {
+      if (!email.trim()) {
+        toast.error("Please enter your email");
+        setStarting(false);
+        return;
+      }
+      body.email = email;
+    } else if (isPublicEntry) {
       if (!name.trim() || !email.trim()) {
         toast.error("Please enter your name and email");
         setStarting(false);
@@ -91,14 +106,26 @@ export function QuizEntryClient({
       body: JSON.stringify(body),
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const err = await res.json();
-      toast.error(err.error || "Failed to start quiz");
+      if (data.alreadySubmitted && data.attemptId) {
+        // Redirect straight to their results
+        const uid = data.userId;
+        router.push(`/quiz/${token}/results/${data.attemptId}?uid=${uid}`);
+        return;
+      }
+      toast.error(data.error || "Failed to start quiz");
       setStarting(false);
       return;
     }
 
-    router.push(`/quiz/${token}/attempt`);
+    // For internal links, pass userId in URL so the server-rendered attempt page can find the attempt
+    if (isInternal && data.attempt?.userId) {
+      router.push(`/quiz/${token}/attempt?uid=${data.attempt.userId}`);
+    } else {
+      router.push(`/quiz/${token}/attempt`);
+    }
   }
 
   return (
@@ -112,6 +139,12 @@ export function QuizEntryClient({
               <span className="text-amber-400 text-xs font-medium uppercase tracking-wide">
                 Quiz
               </span>
+              {isInternal && (
+                <span className="flex items-center gap-1 text-blue-400 text-xs font-medium bg-blue-900/20 border border-blue-600/30 px-2 py-0.5 rounded-full">
+                  <Shield className="w-3 h-3" />
+                  Internal
+                </span>
+              )}
             </div>
             <h1 className="text-xl sm:text-2xl font-bold text-white">{quiz.title}</h1>
             {quiz.description && (
@@ -138,7 +171,7 @@ export function QuizEntryClient({
         {/* Entry Form */}
         <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 sm:p-6 space-y-5">
           <h2 className="text-white font-semibold">
-            {linkedUser ? "Ready to Start" : "Enter Your Details"}
+            {linkedUser ? "Ready to Start" : isInternal ? "Verify Your Identity" : "Enter Your Details"}
           </h2>
 
           {linkedUser ? (
@@ -146,6 +179,23 @@ export function QuizEntryClient({
               <p className="text-zinc-400 text-sm">Taking as</p>
               <p className="text-white font-medium">{linkedUser.name}</p>
               <p className="text-zinc-400 text-sm">{linkedUser.email}</p>
+            </div>
+          ) : isInternal ? (
+            <div className="space-y-4">
+              <p className="text-zinc-400 text-sm">
+                This quiz is for registered users. Enter your registered email to continue.
+              </p>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Your Email</Label>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 h-11"
+                  onKeyDown={(e) => e.key === "Enter" && handleStart()}
+                />
+              </div>
             </div>
           ) : (
             <div className="space-y-4">

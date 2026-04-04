@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { useAutosave } from "@/hooks/use-autosave";
+import Link from "next/link";
 
 interface Question {
   id: string;
@@ -27,16 +28,19 @@ interface Quiz {
 interface QuizShellProps {
   attempt: {
     id: string;
+    userId: string;
     startedAt: string;
     answers: Record<string, string>;
     isComplete: boolean;
   };
   quiz: Quiz;
   questions: Question[];
+  token: string;
 }
 
-export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
+export function QuizShell({ attempt, quiz, questions, token }: QuizShellProps) {
   const [answers, setAnswers] = useState<Record<string, string>>(attempt.answers || {});
+  const resultsUrl = `/quiz/${token}/results/${attempt.id}?uid=${attempt.userId}`;
 
   // Restore from localStorage after mount (avoids hydration mismatch)
   useEffect(() => {
@@ -51,6 +55,7 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
 
   const [submitted, setSubmitted] = useState(attempt.isComplete);
   const [submitting, setSubmitting] = useState(false);
+  const [resultAttemptId, setResultAttemptId] = useState<string | null>(null);
 
   useAutosave(attempt.id, answers);
 
@@ -76,6 +81,7 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
       }
 
       setSubmitted(true);
+      setResultAttemptId(attempt.id);
       localStorage.removeItem(`quiz_draft_${attempt.id}`);
       toast.success("Quiz submitted successfully!");
     } catch {
@@ -128,6 +134,14 @@ export function QuizShell({ attempt, quiz, questions }: QuizShellProps) {
               Your responses for <span className="text-white font-medium">{quiz.title}</span> have been recorded.
             </p>
           </div>
+          {resultAttemptId && (
+            <Link
+              href={resultsUrl}
+              className="inline-block bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-600 hover:to-amber-500 text-black font-semibold px-6 py-3 rounded-lg text-sm"
+            >
+              View My Results
+            </Link>
+          )}
           <p className="text-zinc-500 text-sm">
             Thank you for completing {quiz.title}
           </p>
