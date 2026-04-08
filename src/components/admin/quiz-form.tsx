@@ -21,7 +21,7 @@ const schema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
-  durationMin: z.number().min(1).max(300),
+  durationMin: z.number().min(1).max(100000),
   type: z.enum(["PUBLIC", "PRIVATE"]),
   isActive: z.boolean(),
 });
@@ -137,7 +137,7 @@ export function QuizForm({ defaultValues, quizId }: QuizFormProps) {
             {...register("durationMin", { valueAsNumber: true })}
             type="number"
             min={1}
-            max={300}
+            max={100000}
             className="bg-zinc-900 border-zinc-800 text-white"
           />
           {errors.durationMin && (
