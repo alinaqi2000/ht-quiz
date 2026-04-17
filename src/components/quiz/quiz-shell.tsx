@@ -36,11 +36,17 @@ interface QuizShellProps {
   quiz: Quiz;
   questions: Question[];
   token: string;
+  expiresAt: string | null;
 }
 
-export function QuizShell({ attempt, quiz, questions, token }: QuizShellProps) {
+export function QuizShell({ attempt, quiz, questions, token, expiresAt }: QuizShellProps) {
   const [answers, setAnswers] = useState<Record<string, string>>(attempt.answers || {});
   const resultsUrl = `/quiz/${token}/results/${attempt.id}?uid=${attempt.userId}`;
+
+  // Effective end = min(attempt deadline, link expiry)
+  const attemptEndMs = new Date(attempt.startedAt).getTime() + quiz.durationMin * 60 * 1000;
+  const linkEndMs = expiresAt ? new Date(expiresAt).getTime() : Infinity;
+  const effectiveEndAt = new Date(Math.min(attemptEndMs, linkEndMs)).toISOString();
 
   // Restore from localStorage after mount (avoids hydration mismatch)
   useEffect(() => {
@@ -168,9 +174,8 @@ export function QuizShell({ attempt, quiz, questions, token }: QuizShellProps) {
               </p>
             </div>
             <CountdownTimer
-              initialSeconds={quiz.durationMin * 60}
+              endAt={effectiveEndAt}
               onExpire={handleTimerExpire}
-              startedAt={attempt.startedAt}
             />
           </div>
           <Progress

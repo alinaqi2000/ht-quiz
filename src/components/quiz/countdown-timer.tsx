@@ -6,27 +6,17 @@ import { cn } from "@/lib/utils";
 import { Clock } from "lucide-react";
 
 interface CountdownTimerProps {
-  initialSeconds: number;
+  // effective end time as ISO string (already min of attempt deadline & link expiry)
+  endAt: string;
   onExpire: () => void;
-  startedAt: string;
 }
 
-export function CountdownTimer({
-  initialSeconds,
-  onExpire,
-  startedAt,
-}: CountdownTimerProps) {
-  const [remaining, setRemaining] = useState<number | null>(null);
+export function CountdownTimer({ endAt, onExpire }: CountdownTimerProps) {
+  const [mounted, setMounted] = useState(false);
 
-  // Calculate remaining only on client after mount to avoid hydration mismatch
-  useEffect(() => {
-    const elapsed = Math.floor(
-      (Date.now() - new Date(startedAt).getTime()) / 1000
-    );
-    setRemaining(Math.max(0, initialSeconds - elapsed));
-  }, [initialSeconds, startedAt]);
+  useEffect(() => { setMounted(true); }, []);
 
-  if (remaining === null) {
+  if (!mounted) {
     return (
       <div className="flex items-center gap-2 px-4 py-2 rounded-lg font-mono font-bold text-lg bg-zinc-900 text-zinc-300 border border-zinc-800">
         <Clock className="w-4 h-4" />
@@ -35,31 +25,32 @@ export function CountdownTimer({
     );
   }
 
-  return <TimerDisplay remaining={remaining} onExpire={onExpire} />;
+  return <TimerDisplay endAt={new Date(endAt).getTime()} onExpire={onExpire} />;
 }
 
-function TimerDisplay({
-  remaining,
-  onExpire,
-}: {
-  remaining: number;
-  onExpire: () => void;
-}) {
-  const { formatted, isWarning, isDanger } = useCountdown(remaining, onExpire);
+function TimerDisplay({ endAt, onExpire }: { endAt: number; onExpire: () => void }) {
+  const { formatted, seconds, isWarning, isDanger } = useCountdown(endAt, onExpire);
+
+  // Show label based on how much time is left
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const showLabel = days > 0 || hours > 0;
 
   return (
     <div
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-lg font-mono font-bold text-lg transition-colors",
+        "flex items-center gap-2 px-3 py-2 rounded-lg font-mono font-bold transition-colors",
         isDanger
-          ? "bg-red-600/20 text-red-400 border border-red-600/40 animate-pulse"
+          ? "bg-red-600/20 text-red-400 border border-red-600/40 animate-pulse text-lg"
           : isWarning
-          ? "bg-yellow-600/20 text-yellow-400 border border-yellow-600/40"
-          : "bg-zinc-900 text-zinc-300 border border-zinc-800"
+          ? "bg-yellow-600/20 text-yellow-400 border border-yellow-600/40 text-lg"
+          : showLabel
+          ? "bg-zinc-900 text-zinc-300 border border-zinc-800 text-base"
+          : "bg-zinc-900 text-zinc-300 border border-zinc-800 text-lg"
       )}
     >
-      <Clock className="w-4 h-4" />
-      {formatted}
+      <Clock className="w-4 h-4 shrink-0" />
+      <span>{formatted}</span>
     </div>
   );
 }

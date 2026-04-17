@@ -110,6 +110,7 @@ export default async function QuizAttemptPage({
       }}
       questions={questions}
       token={token}
+      expiresAt={quizLink.expiresAt ? quizLink.expiresAt.toISOString() : null}
     />
   );
 }

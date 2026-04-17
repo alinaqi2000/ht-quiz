@@ -81,6 +81,7 @@ export default async function QuizEntryPage({
       sessionUserId={session?.user?.id}
       sessionUserName={session?.user?.name}
       sessionUserEmail={session?.user?.email}
+      expiresAt={quizLink.expiresAt ? quizLink.expiresAt.toISOString() : null}
     />
   );
 }

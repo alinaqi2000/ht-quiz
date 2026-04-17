@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Upload, Download, Languages } from "lucide-react";
+import { Upload, Download, Languages, FileDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // Detects Urdu/Arabic script characters
@@ -95,6 +95,10 @@ export function QuestionImportTranslate({ quizId, questionCount, sampleText }: Q
     window.location.href = `/api/admin/quizzes/${quizId}/import-questions`;
   }
 
+  function handleExport() {
+    window.location.href = `/api/admin/quizzes/${quizId}/import-questions?export=true`;
+  }
+
   return (
     <div className="flex flex-wrap gap-2">
       <Button
@@ -126,16 +130,27 @@ export function QuestionImportTranslate({ quizId, questionCount, sampleText }: Q
       />
 
       {questionCount > 0 && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleTranslate}
-          disabled={translating}
-          className="border-emerald-700/50 text-emerald-400 hover:bg-emerald-900/20 hover:text-emerald-300"
-        >
-          <Languages className="w-3.5 h-3.5 mr-1.5" />
-          {translating ? "Translating..." : targetLabel}
-        </Button>
+        <>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+          >
+            <FileDown className="w-3.5 h-3.5 mr-1.5" />
+            Export CSV
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleTranslate}
+            disabled={translating}
+            className="border-emerald-700/50 text-emerald-400 hover:bg-emerald-900/20 hover:text-emerald-300"
+          >
+            <Languages className="w-3.5 h-3.5 mr-1.5" />
+            {translating ? "Translating..." : targetLabel}
+          </Button>
+        </>
       )}
     </div>
   );

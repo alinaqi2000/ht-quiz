@@ -13,7 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Clock, HelpCircle, BookOpen, AlertTriangle, Shield } from "lucide-react";
+import { Clock, HelpCircle, BookOpen, AlertTriangle, Shield, CalendarClock } from "lucide-react";
+import { format } from "date-fns";
 
 interface Quiz {
   id: string;
@@ -41,6 +42,7 @@ interface QuizEntryClientProps {
   sessionUserId?: string;
   sessionUserName?: string | null;
   sessionUserEmail?: string | null;
+  expiresAt?: string | null;
 }
 
 export function QuizEntryClient({
@@ -51,6 +53,7 @@ export function QuizEntryClient({
   isInternal,
   alreadyUsed,
   groupLeaders,
+  expiresAt,
 }: QuizEntryClientProps) {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -248,10 +251,31 @@ export function QuizEntryClient({
           )}
 
           <div>
-            <p className="text-zinc-500 text-xs mb-4">
-              Once started, the timer begins and you cannot pause. Make sure
-              you have {quiz.durationMin} minutes available.
-            </p>
+            {(() => {
+              const durationMs = quiz.durationMin * 60 * 1000;
+              const linkExpiresMs = expiresAt ? new Date(expiresAt).getTime() : null;
+              // Time remaining on the link right now
+              const linkRemainingMs = linkExpiresMs ? linkExpiresMs - Date.now() : null;
+              // Will the link expire before the full duration?
+              const linkExpiresSooner = linkRemainingMs !== null && linkRemainingMs < durationMs;
+
+              return linkExpiresSooner ? (
+                <div className="flex items-start gap-2 bg-yellow-900/20 border border-yellow-600/30 rounded-lg p-3 mb-4">
+                  <CalendarClock className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
+                  <p className="text-yellow-300 text-xs">
+                    This quiz link expires on{" "}
+                    <span className="font-semibold">{format(new Date(expiresAt!), "MMM d, yyyy 'at' HH:mm")}</span>.
+                    Your quiz will end at that time regardless of how much time remains on the timer.
+                  </p>
+                </div>
+              ) : (
+                <p className="text-zinc-500 text-xs mb-4">
+                  Once started, the timer begins and you cannot pause. Make sure
+                  you have {quiz.durationMin} minutes available.
+                </p>
+              );
+            })()}
+
             <Button
               onClick={handleStart}
               disabled={starting}

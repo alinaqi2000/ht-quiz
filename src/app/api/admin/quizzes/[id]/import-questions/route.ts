@@ -39,9 +39,16 @@ function parseCSV(text: string): string[][] {
 const VALID_ANSWERS = ["A", "B", "C", "D"];
 const VALID_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"];
 
-// GET: Download sample CSV
+function csvEscape(value: string): string {
+  if (value.includes(",") || value.includes('"') || value.includes("\n")) {
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+  return value;
+}
+
+// GET: Download sample CSV (?export=true exports actual questions)
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
@@ -49,6 +56,35 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id: quizId } = await params;
+  const { searchParams } = new URL(req.url);
+
+  if (searchParams.get("export") === "true") {
+    // Export actual questions
+    const [quiz, questions] = await Promise.all([
+      prisma.quiz.findUnique({ where: { id: quizId }, select: { title: true } }),
+      prisma.question.findMany({ where: { quizId }, orderBy: { order: "asc" } }),
+    ]);
+    if (!quiz) return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
+
+    const header = "question,optionA,optionB,optionC,optionD,correctAnswer,difficulty";
+    const rows = questions.map((q) =>
+      [q.text, q.optionA, q.optionB, q.optionC, q.optionD, q.correctAnswer, q.difficulty]
+        .map(csvEscape)
+        .join(",")
+    );
+    const csv = [header, ...rows].join("\n");
+    const filename = `${quiz.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}_questions.csv`;
+
+    return new NextResponse(csv, {
+      headers: {
+        "Content-Type": "text/csv",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+      },
+    });
+  }
+
+  // Sample CSV
   const sample = [
     "question,optionA,optionB,optionC,optionD,correctAnswer,difficulty",
     '"What is the capital of France?",London,Paris,Berlin,Madrid,B,EASY',
